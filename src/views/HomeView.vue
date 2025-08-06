@@ -74,26 +74,26 @@
                 程式開發
               </h3>
               <div class="skill-list">
-                <div class="skill-item">
+                <div class="skill-item" v-memo="[skillProgress.golang]">
                   <div class="skill-header">
                     <span class="skill-name">Golang</span>
                     <span class="skill-percentage">{{ skillProgress.golang }}%</span>
                   </div>
-                  <md-linear-progress :value="skillProgress.golang / 100" class="skill-progress"/>
+                  <md-linear-progress :value="skillProgress.golang / 100" class="skill-progress" />
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" v-memo="[skillProgress.python]">
                   <div class="skill-header">
                     <span class="skill-name">Python</span>
                     <span class="skill-percentage">{{ skillProgress.python }}%</span>
                   </div>
-                  <md-linear-progress :value="skillProgress.python / 100" class="skill-progress"/>
+                  <md-linear-progress :value="skillProgress.python / 100" class="skill-progress" />
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" v-memo="[skillProgress.vuejs]">
                   <div class="skill-header">
                     <span class="skill-name">Vue.js</span>
                     <span class="skill-percentage">{{ skillProgress.vuejs }}%</span>
                   </div>
-                  <md-linear-progress :value="skillProgress.vuejs / 100" class="skill-progress"/>
+                  <md-linear-progress :value="skillProgress.vuejs / 100" class="skill-progress" />
                 </div>
               </div>
             </div>
@@ -106,27 +106,26 @@
                 網路與安全
               </h3>
               <div class="skill-list">
-                <div class="skill-item">
+                <div class="skill-item" v-memo="[skillProgress.network]">
                   <div class="skill-header">
                     <span class="skill-name">網路營運</span>
                     <span class="skill-percentage">{{ skillProgress.network }}%</span>
                   </div>
-                  <md-linear-progress :value="skillProgress.network / 100" class="skill-progress"/>
+                  <md-linear-progress :value="skillProgress.network / 100" class="skill-progress" />
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" v-memo="[skillProgress.firewall]">
                   <div class="skill-header">
                     <span class="skill-name">防火牆配置</span>
                     <span class="skill-percentage">{{ skillProgress.firewall }}%</span>
                   </div>
-                  <md-linear-progress :value="skillProgress.firewall / 100" class="skill-progress"/>
+                  <md-linear-progress :value="skillProgress.firewall / 100" class="skill-progress" />
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" v-memo="[skillProgress.vulnerability]">
                   <div class="skill-header">
                     <span class="skill-name">弱點掃描</span>
                     <span class="skill-percentage">{{ skillProgress.vulnerability }}%</span>
                   </div>
-                  <md-linear-progress :value="skillProgress.vulnerability / 100"
-                    class="skill-progress"/>
+                  <md-linear-progress :value="skillProgress.vulnerability / 100" class="skill-progress" />
                 </div>
               </div>
             </div>
@@ -139,27 +138,26 @@
                 雲端與容器
               </h3>
               <div class="skill-list">
-                <div class="skill-item">
+                <div class="skill-item" v-memo="[skillProgress.aws]">
                   <div class="skill-header">
                     <span class="skill-name">AWS</span>
                     <span class="skill-percentage">{{ skillProgress.aws }}%</span>
                   </div>
-                  <md-linear-progress :value="skillProgress.aws / 100" class="skill-progress"/>
+                  <md-linear-progress :value="skillProgress.aws / 100" class="skill-progress" />
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" v-memo="[skillProgress.docker]">
                   <div class="skill-header">
                     <span class="skill-name">Docker</span>
                     <span class="skill-percentage">{{ skillProgress.docker }}%</span>
                   </div>
-                  <md-linear-progress :value="skillProgress.docker / 100" class="skill-progress"/>
+                  <md-linear-progress :value="skillProgress.docker / 100" class="skill-progress" />
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" v-memo="[skillProgress.kubernetes]">
                   <div class="skill-header">
                     <span class="skill-name">Kubernetes</span>
                     <span class="skill-percentage">{{ skillProgress.kubernetes }}%</span>
                   </div>
-                  <md-linear-progress :value="skillProgress.kubernetes / 100"
-                    class="skill-progress"/>
+                  <md-linear-progress :value="skillProgress.kubernetes / 100" class="skill-progress" />
                 </div>
               </div>
             </div>
@@ -211,13 +209,13 @@
               </Card>
             </a>
 
-            <a href="https://qian30.net" target="_blank" rel="noopener noreferrer" class="contact-link">
+            <a href="https://blog.qian30.net" target="_blank" rel="noopener noreferrer" class="contact-link">
               <Card class="contact-card">
                 <div class="contact-item">
                   <md-icon class="contact-icon">language</md-icon>
                   <div class="contact-details">
                     <h3>部落格</h3>
-                    <p>qian30.net</p>
+                    <p>blog.qian30.net</p>
                   </div>
                 </div>
               </Card>
@@ -246,23 +244,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
 import VuetifyTimeline from '../components/VuetifyTimeline.vue'
 import Card from '../components/Card.vue'
 
-
-const skillProgress = ref({
-  golang: 0,
-  python: 0,
-  vuejs: 0,
-  network: 0,
-  firewall: 0,
-  vulnerability: 0,
-  aws: 0,
-  docker: 0,
-  kubernetes: 0
-})
-
+const animationProgress = ref(0)
 
 const targetSkills = {
   golang: 60,
@@ -276,6 +262,13 @@ const targetSkills = {
   kubernetes: 66
 }
 
+const skillProgress = computed(() => {
+  const progress: Record<string, number> = {}
+  Object.keys(targetSkills).forEach(skill => {
+    progress[skill] = Math.round(targetSkills[skill as keyof typeof targetSkills] * animationProgress.value)
+  })
+  return progress
+})
 
 const workExperience = ref([
   {
@@ -297,66 +290,80 @@ const openBlog = () => {
   window.open('https://blog.qian30.net', '_blank', 'noopener,noreferrer')
 }
 
-
 const animateSkills = () => {
   const duration = 2000
-  const steps = 60
-  const stepDuration = duration / steps
+  const startTime = performance.now()
 
-  let currentStep = 0
-
-  const animate = () => {
-    if (currentStep >= steps) return
-
-    const progress = currentStep / steps
+  const animate = (currentTime) => {
+    const elapsed = currentTime - startTime
+    const progress = Math.min(elapsed / duration, 1)
     const easeOutQuart = 1 - Math.pow(1 - progress, 4)
 
-    Object.keys(targetSkills).forEach(skill => {
-      skillProgress.value[skill] = Math.round(targetSkills[skill] * easeOutQuart)
-    })
+    animationProgress.value = easeOutQuart
 
-    currentStep++
-    setTimeout(animate, stepDuration)
+    if (progress < 1) {
+      requestAnimationFrame(animate)
+    }
   }
 
-  animate()
+  requestAnimationFrame(animate)
 }
 
-onMounted(() => {
+const createObserver = (callback: (entries: IntersectionObserverEntry[]) => void, options: IntersectionObserverInit = {}): IntersectionObserver => {
+  return new IntersectionObserver(callback, options)
+}
 
-  const skillsObserver = new IntersectionObserver((entries) => {
+const skillsObserver = ref<IntersectionObserver | null>(null)
+const animationObserver = ref<IntersectionObserver | null>(null)
+
+onMounted(async () => {
+  await nextTick()
+
+  skillsObserver.value = createObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-
         animateSkills()
-        skillsObserver.unobserve(entry.target)
+        skillsObserver.value?.unobserve(entry.target)
       }
     })
   }, {
-    threshold: 0.3
+    threshold: 0.3,
+    rootMargin: '0px 0px -50px 0px'
   })
 
-
-  const skillsSection = document.querySelector('.skills-section')
-  if (skillsSection) {
-    skillsObserver.observe(skillsSection)
-  }
-
-
-  const observer = new IntersectionObserver((entries) => {
+  animationObserver.value = createObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('animate-in')
+        animationObserver.value?.unobserve(entry.target)
       }
     })
   }, {
-    threshold: 0.1
+    threshold: 0.1,
+    rootMargin: '0px 0px -20px 0px'
   })
 
-  // 觀察所有需要動畫的元素
-  document.querySelectorAll('.skill-card, .contact-card').forEach(el => {
-    observer.observe(el)
+  const skillsSection = document.querySelector('.skills-section')
+  if (skillsSection) {
+    skillsObserver.value.observe(skillsSection)
+  }
+
+  const animatedElements = document.querySelectorAll('.skill-card, .contact-card')
+  animatedElements.forEach(el => {
+    animationObserver.value?.observe(el)
   })
+})
+
+onUnmounted(() => {
+  if (skillsObserver.value) {
+    skillsObserver.value.disconnect()
+    skillsObserver.value = null
+  }
+
+  if (animationObserver.value) {
+    animationObserver.value.disconnect()
+    animationObserver.value = null
+  }
 })
 </script>
 
