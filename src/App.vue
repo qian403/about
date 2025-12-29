@@ -1,17 +1,7 @@
-<script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+<script setup>
 import { useRoute } from 'vue-router'
 
-import { useMainStore } from './stores/main'
-
 const route = useRoute()
-const store = useMainStore()
-const isLoading = computed(() => store.isLoading)
-const isCVPage = computed(() => route.path === '/cv')
-
-const onEnter = (el: Element) => {
-  store.setLoading(false)
-}
 </script>
 
 <template>
@@ -19,21 +9,16 @@ const onEnter = (el: Element) => {
     <!-- 主要內容區域 -->
     <main class="relative z-10">
       <router-view v-slot="{ Component, route }">
-        <transition name="page-slide" mode="out-in" @enter="onEnter">
+        <transition name="page-slide" mode="out-in">
           <component :is="Component" :key="route.path" />
         </transition>
       </router-view>
     </main>
-
-    <div v-if="isLoading" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md flex items-center justify-center">
-      <div class="text-center">
-
-      </div>
-    </div>
   </div>
 </template>
 
 <style>
+/* Page transition animations */
 .page-slide-enter-active,
 .page-slide-leave-active {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -49,50 +34,7 @@ const onEnter = (el: Element) => {
   transform: translateY(-20px);
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-/* 防止g3m/53水平滾動 */
-html,
-body {
-  overflow-x: hidden;
-  max-width: 100vw;
-}
-
-#app {
-  overflow-x: hidden;
-  max-width: 100vw;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f5f5f5;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #e0e0e0;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #bdbdbd;
-}
-
-
-::selection {
-  background-color: rgba(59, 130, 246, 0.4);
-  color: #e0f2fe;
-}
-
-:focus-visible {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
-}
-
+/* Material Design Web Components styling */
 md-card {
   --md-sys-color-surface: rgba(255, 255, 255, 0.1);
   --md-sys-color-surface-container: rgba(255, 255, 255, 0.05);
@@ -135,15 +77,7 @@ md-icon {
   overflow: visible;
 }
 
-/* 全域字體 */
-body {
-  font-family: 'Roboto', sans-serif;
-  color: #e0f2fe;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%);
-  min-height: 100vh;
-}
-
-/* Material Design 3 色彩系統 - 藍色調 */
+/* Material Design 3 color system - Blue theme */
 :root {
   --md-sys-color-primary: #3b82f6;
   --md-sys-color-on-primary: #ffffff;
@@ -158,5 +92,28 @@ body {
   --md-sys-color-surface-container: rgba(255, 255, 255, 0.05);
   --md-sys-color-on-surface-variant: #93c5fd;
   --md-sys-color-outline: #60a5fa;
+}
+
+/* Loading spinner styles */
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  color: #e0f2fe;
+  font-size: 1rem;
+  font-weight: 500;
 }
 </style>

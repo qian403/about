@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vuetify from 'vite-plugin-vuetify'
 import path from 'path'
 
 export default defineConfig({
@@ -10,7 +11,8 @@ export default defineConfig({
           isCustomElement: (tag) => tag.startsWith('md-')
         }
       }
-    })
+    }),
+    vuetify({ autoImport: true })
   ],
   resolve: {
     alias: {

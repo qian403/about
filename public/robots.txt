@@ -1,0 +1,7 @@
+# robots.txt for https://about.qian30.net
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://about.qian30.net/sitemap.xml
