@@ -1,7 +1,14 @@
-# robots.txt for https://about.qian30.net
+# robots.txt for https://qian30.net
 
 User-agent: *
 Allow: /
 
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
 # Sitemap location
-Sitemap: https://about.qian30.net/sitemap.xml
+Sitemap: https://qian30.net/sitemap.xml
+
+# Block common bot paths (if any)
+Disallow: /api/
+Disallow: /*.json$
