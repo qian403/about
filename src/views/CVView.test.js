@@ -197,8 +197,8 @@ describe('Property 1: 視覺風格一致性', () => {
 describe('Property 2: CV 內容完整性', () => {
   // Required contact information
   const REQUIRED_CONTACTS = [
-    { type: 'email', label: 'qian@qian30.net' },
-    { type: 'blog', label: 'blog.qian30.net' }
+    { type: 'email', label: 'hi@chien.dev' },
+    { type: 'blog', label: 'blog.chien.dev' }
   ]
 
   // Required skills

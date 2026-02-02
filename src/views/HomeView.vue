@@ -346,8 +346,8 @@ const contacts = ref([
   {
     type: 'email',
     label: 'Email',
-    value: 'qian@qian30.net',
-    href: 'mailto:qian@qian30.net',
+    value: 'hi@chien.dev',
+    href: 'mailto:hi@chien.dev',
     icon: 'email',
     external: false
   },
@@ -362,8 +362,8 @@ const contacts = ref([
   {
     type: 'blog',
     label: 'Blog',
-    value: 'blog.qian30.net',
-    href: 'https://blog.qian30.net',
+    value: 'blog.chien.dev',
+    href: 'https://blog.chien.dev',
     icon: 'language',
     external: true
   },

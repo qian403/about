@@ -96,7 +96,7 @@ import { onMounted, onBeforeUnmount, ref } from 'vue'
 defineOptions({ name: 'CVView' })
 const pdfUrl = `${import.meta.env.BASE_URL}cv/HSU_CHIA_CHIEN_CV.pdf`
 const exportToPDF = () => { const a = document.createElement('a'); a.href = pdfUrl; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.setAttribute('download', ''); document.body.appendChild(a); a.click(); document.body.removeChild(a) }
-const contacts = [{ type: 'email', label: 'qian@qian30.net', href: 'mailto:qian@qian30.net', icon: 'email' },{ type: 'blog', label: 'blog.qian30.net', href: 'https://blog.qian30.net', icon: 'language' }]
+const contacts = [{ type: 'email', label: 'hi@chien.dev', href: 'mailto:hi@chien.dev', icon: 'email' },{ type: 'blog', label: 'blog.chien.dev', href: 'https://blog.chien.dev', icon: 'language' }]
 const skills = ['Network(IT)','C++','Linux/Windows Server','Golang','Cybersecurity']
 const certifications = ['iPAS資訊安全工程師-中級能力鑑定','網路架設丙級','電腦硬體裝修丙級']
 const experience = [{role:'實習工程師',company:'瀚霖智動銷售科技有限公司',department:'系統維運與安全部門',period:'2024/11 - NOW'},{role:'前端工程師',company:'網化數位有限公司',department:'研發部門',period:'2023/7 - 2023/9'}]
