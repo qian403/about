@@ -16,9 +16,10 @@
         <p class="hero-tagline">用程式碼解決問題，用社群連結人們</p>
         
         <div class="hero-actions" role="group" aria-label="主要行動按鈕">
-          <button class="btn btn-primary" @click="goToCV">
+          <!-- CV 按鈕暫時隱藏 -->
+          <!-- <button class="btn btn-primary" @click="goToCV">
             CV
-          </button>
+          </button> -->
           <button class="btn btn-secondary" @click="scrollToSection('contact')">
             聯絡我
           </button>
