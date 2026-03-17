@@ -1,11 +1,17 @@
 <template>
   <article class="project-card" :aria-labelledby="`project-${projectId}`">
     <div class="project-image" v-if="project.image">
-      <img 
-        :src="project.image" 
-        :alt="`${project.name} 專案截圖`" 
-        loading="lazy" 
-      />
+      <picture>
+        <source :srcset="project.image.replace('.png', '.webp')" type="image/webp" />
+        <img 
+          :src="project.image" 
+          :alt="`${project.name} 專案截圖`" 
+          loading="lazy"
+          width="792"
+          height="498"
+          decoding="async"
+        />
+      </picture>
     </div>
     <div class="project-placeholder" v-else aria-hidden="true">
       <md-icon>code</md-icon>

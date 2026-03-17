@@ -12,12 +12,26 @@ export default defineConfig({
         }
       }
     }),
-    vuetify({ autoImport: true })
+    vuetify({ 
+      autoImport: true,
+      styles: { configFile: 'src/assets/vuetify-settings.scss' }
+    })
   ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vuetify': ['vuetify'],
+          'vue-vendor': ['vue', 'vue-router']
+        }
+      }
+    },
+    cssCodeSplit: true
   },
   server: {
     port: 3000,

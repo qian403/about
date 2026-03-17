@@ -1,6 +1,14 @@
-/* Material Icons */
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+/* Fonts are loaded asynchronously in index.html */
+
+/* Font fallback to reduce layout shift */
+@font-face {
+  font-family: 'Inter fallback';
+  src: local('Arial');
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+  size-adjust: 107%;
+}
 
 /* ========================================
    Portfolio Redesign - 設計系統
@@ -144,7 +152,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', 'Inter fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   line-height: var(--line-height-normal);
@@ -472,7 +480,7 @@ a:hover {
    Material Icons 樣式
    ======================================== */
 
-md-icon {
+md-icon, .material-icons {
   font-family: 'Material Icons';
   font-size: 24px;
   width: 24px;
@@ -481,6 +489,16 @@ md-icon {
   align-items: center;
   justify-content: center;
   color: inherit;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 /* ========================================

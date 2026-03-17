@@ -65,16 +65,26 @@ md-circular-progress-four-color {
   --md-sys-color-primary: #3b82f6;
 }
 
-md-icon {
+md-icon, .material-icons {
   color: inherit;
-  font-family: 'Material Symbols Outlined';
+  font-family: 'Material Icons';
   font-size: 24px;
   width: 24px;
   height: 24px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   overflow: visible;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 /* Material Design 3 color system - Blue theme */

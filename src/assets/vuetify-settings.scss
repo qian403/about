@@ -1,0 +1,5 @@
+// Disable unused Vuetify features to reduce CSS bundle size
+@forward 'vuetify/settings' with (
+  $utilities: false,
+  $color-pack: false
+);

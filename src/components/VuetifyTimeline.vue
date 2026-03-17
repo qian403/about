@@ -9,7 +9,7 @@
                     <template v-if="!compact">
                         <v-card class="timeline-card" elevation="2">
                             <v-card-title class="timeline-title">
-                                <v-icon :icon="item.icon" class="timeline-icon mr-2"></v-icon>
+                                <v-icon class="timeline-icon mr-2"><svg viewBox="0 0 24 24" style="width:1em;height:1em"><path :d="item.icon" fill="currentColor"/></svg></v-icon>
                                 {{ item.title }}
                             </v-card-title>
                             <v-card-subtitle class="timeline-company">
@@ -18,16 +18,17 @@
                             <v-card-text v-if="item.description" class="timeline-description">
                                 {{ item.description }}
                             </v-card-text>
-                            <div class="timeline-period">{{ item.period }}</div>
+                            <div class="timeline-period">{{ item.period }}<span v-if="item.duration" class="timeline-duration">（{{ item.duration }}）</span></div>
                         </v-card>
                     </template>
                     <template v-else>
                         <div class="timeline-card-compact">
                             <div class="timeline-title-compact">
-                                <v-icon :icon="item.icon" class="timeline-icon-compact"></v-icon>
+                                <span class="timeline-icon-compact"><svg viewBox="0 0 24 24" style="width:1em;height:1em"><path :d="item.icon" fill="currentColor"/></svg></span>
                                 <span>{{ item.title }}</span>
                             </div>
                             <div v-if="item.company" class="timeline-company-compact">{{ item.company }}</div>
+                            <div v-if="item.duration" class="timeline-duration-compact">{{ item.duration }}</div>
                             <div v-if="item.description" class="timeline-description-compact">{{ item.description }}
                             </div>
                             <div class="timeline-period-compact">{{ item.period }}</div>
@@ -47,6 +48,7 @@ interface TimelineItem {
     period: string
     description?: string
     color?: string
+    duration?: string
 }
 
 interface Props {
@@ -200,6 +202,18 @@ defineOptions({
     display: flex;
     align-items: center;
     gap: 0.25rem;
+}
+
+.timeline-duration {
+    color: var(--color-text-secondary, #a8c5d8);
+    font-weight: 400;
+}
+
+.timeline-duration-compact {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary, #a8c5d8);
+    font-weight: 400;
+    margin-top: 0.25rem;
 }
 
 

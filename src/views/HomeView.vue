@@ -4,35 +4,33 @@
     <a href="#projects" class="skip-link" @click.prevent="scrollToSection('projects')">
       跳至主要內容
     </a>
-    
+
     <!-- Navigation Bar -->
     <NavBar />
-    
+
     <!-- Hero Section -->
     <header class="hero" role="banner" aria-labelledby="hero-title">
       <div class="hero-content">
         <h1 id="hero-title" class="hero-name">HSU CHIA CHIEN</h1>
         <p class="hero-role" aria-live="polite" aria-atomic="true">{{ currentRole }}</p>
         <p class="hero-tagline">用程式碼解決問題，用社群連結人們</p>
-        
+
         <div class="hero-actions" role="group" aria-label="主要行動按鈕">
           <!-- CV 按鈕暫時隱藏 -->
           <!-- <button class="btn btn-primary" @click="goToCV">
-            CV
-          </button> -->
+              CV
+            </button> -->
           <button class="btn btn-secondary" @click="scrollToSection('contact')">
             聯絡我
           </button>
+          <a class="btn btn-primary" href="https://blog.chien.dev" target="_blank" rel="noopener noreferrer">
+            Blog
+          </a>
         </div>
       </div>
-      
+
       <!-- 滾動指示器 -->
-      <button 
-        class="scroll-indicator" 
-        @click="scrollToSection('projects')"
-        aria-label="向下滾動到專案區塊"
-        type="button"
-      >
+      <button class="scroll-indicator" @click="scrollToSection('projects')" aria-label="向下滾動到專案區塊" type="button">
         <span class="scroll-text" aria-hidden="true">向下滾動</span>
         <div class="scroll-arrow" aria-hidden="true"></div>
       </button>
@@ -43,20 +41,10 @@
       <div class="container">
         <h2 id="projects-title" class="section-title">專案作品</h2>
         <div class="projects-grid" role="list" aria-label="專案列表">
-          <ProjectCard 
-            v-for="project in projects" 
-            :key="project.name"
-            :project="project"
-            role="listitem"
-          />
+          <ProjectCard v-for="project in projects" :key="project.name" :project="project" role="listitem" />
         </div>
         <div class="more-projects">
-          <a 
-            href="https://github.com/qian403" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="btn btn-secondary"
-          >
+          <a href="https://github.com/qian403" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
             更多專案
           </a>
         </div>
@@ -68,13 +56,7 @@
       <div class="container">
         <h2 id="skills-title" class="section-title">技術能力</h2>
         <div class="skills-cloud" role="list" aria-label="技能列表">
-          <span 
-            v-for="skill in allSkills" 
-            :key="skill.name"
-            class="skill-tag"
-            :class="skill.level"
-            role="listitem"
-          >
+          <span v-for="skill in allSkills" :key="skill.name" class="skill-tag" :class="skill.level" role="listitem">
             {{ skill.name }}
           </span>
         </div>
@@ -85,21 +67,17 @@
     <section id="experience" class="section experience-section" aria-labelledby="experience-title">
       <div class="container">
         <h2 id="experience-title" class="section-title">經歷軌跡</h2>
-        
+
         <!-- 篩選按鈕 -->
         <div class="timeline-filters">
-          <button 
-            v-for="filterOption in experienceFilters" 
-            :key="filterOption.value"
-            class="filter-btn"
+          <button v-for="filterOption in experienceFilters" :key="filterOption.value" class="filter-btn"
             :class="{ active: currentExperienceFilter === filterOption.value }"
-            @click="currentExperienceFilter = filterOption.value"
-          >
+            @click="currentExperienceFilter = filterOption.value">
             <md-icon aria-hidden="true">{{ filterOption.icon }}</md-icon>
             <span>{{ filterOption.label }}</span>
           </button>
         </div>
-        
+
         <VuetifyTimeline :items="filteredExperience" :compact="true" :alternate="false" />
       </div>
     </section>
@@ -110,22 +88,21 @@
         <h2 id="contact-title" class="section-title">聯絡我</h2>
         <p class="contact-intro">有任何問題或合作機會，歡迎透過以下方式聯繫我</p>
         <div class="contact-grid">
-          <a 
-            v-for="contact in contacts" 
-            :key="contact.type"
-            :href="contact.href" 
+          <a v-for="contact in contacts" :key="contact.type" :href="contact.href"
             :target="contact.external ? '_blank' : undefined"
-            :rel="contact.external ? 'noopener noreferrer' : undefined"
-            class="contact-card"
-            :aria-label="`${contact.label}: ${contact.value}`"
-          >
+            :rel="contact.external ? 'noopener noreferrer' : undefined" class="contact-card"
+            :aria-label="`${contact.label}: ${contact.value}`">
             <div class="contact-icon-wrapper">
               <md-icon v-if="contact.icon">{{ contact.icon }}</md-icon>
-              <svg v-else-if="contact.svg === 'github'" class="contact-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              <svg v-else-if="contact.svg === 'github'" class="contact-svg" viewBox="0 0 24 24" fill="currentColor"
+                aria-hidden="true">
+                <path
+                  d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
               </svg>
-              <svg v-else-if="contact.svg === 'linkedin'" class="contact-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              <svg v-else-if="contact.svg === 'linkedin'" class="contact-svg" viewBox="0 0 24 24" fill="currentColor"
+                aria-hidden="true">
+                <path
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
               </svg>
             </div>
             <div class="contact-info">
@@ -138,14 +115,8 @@
     </section>
 
     <!-- Back to Top Button -->
-    <button 
-      class="back-to-top" 
-      :class="{ visible: showBackToTop }"
-      @click="scrollToTop"
-      aria-label="回到頂部"
-      type="button"
-      :tabindex="showBackToTop ? 0 : -1"
-    >
+    <button class="back-to-top" :class="{ visible: showBackToTop }" @click="scrollToTop" aria-label="回到頂部" type="button"
+      :tabindex="showBackToTop ? 0 : -1">
       <md-icon aria-hidden="true">keyboard_arrow_up</md-icon>
     </button>
   </main>
@@ -154,6 +125,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { mdiBriefcase, mdiSchool, mdiAccountGroup } from '@mdi/js'
 import VuetifyTimeline from '../components/VuetifyTimeline.vue'
 import ProjectCard from '../components/ProjectCard.vue'
 import NavBar from '../components/NavBar.vue'
@@ -189,7 +161,7 @@ onMounted(() => {
     roleIndex = (roleIndex + 1) % roles.length
     currentRole.value = roles[roleIndex]
   }, 3000)
-  
+
   // 監聽滾動事件
   window.addEventListener('scroll', handleScroll, { passive: true })
 })
@@ -209,7 +181,7 @@ const projects = ref([
     tags: ['Web', 'Tools'],
     github: 'https://github.com/qian403/web-tools',
     demo: null,
-    image: null
+    image: '/tools.png'
   },
   {
     name: 'CatchTheDiff',
@@ -259,85 +231,118 @@ const currentExperienceFilter = ref('work')
 const experienceData = ref([
   {
     type: 'work',
-    icon: 'mdi-briefcase',
+    icon: mdiBriefcase,
     title: '實習工程師',
     company: '瀚霖智動銷售科技有限公司',
     period: '2024年11月 - 現在'
   },
   {
     type: 'work',
-    icon: 'mdi-briefcase',
+    icon: mdiBriefcase,
     title: '前端工程師',
     company: '網化數位有限公司',
     period: '2023年7月 - 2023年9月'
   },
   {
     type: 'education',
-    icon: 'mdi-school',
+    icon: mdiSchool,
     title: '資訊工程系',
     company: '國立宜蘭大學',
     period: '2024年 - 現在'
   },
   {
     type: 'education',
-    icon: 'mdi-school',
+    icon: mdiSchool,
     title: '資訊科',
     company: '國立羅東高級工業職業學校',
     period: '2021年 - 2024年'
   },
   {
     type: 'community',
-    icon: 'mdi-account-group',
+    icon: mdiAccountGroup,
     title: '總召',
     company: 'SITCON 學生計算機年會 2026',
     period: '2025年 - 2026年'
   },
   {
     type: 'community',
-    icon: 'mdi-account-group',
+    icon: mdiAccountGroup,
     title: '副召',
     company: 'SITCON Camp 2025',
     period: '2025年'
   },
   {
     type: 'community',
-    icon: 'mdi-account-group',
+    icon: mdiAccountGroup,
     title: '行政組副組長',
     company: 'SITCON 學生計算機年會 2025',
     period: '2024年 - 2025年'
   },
   {
     type: 'community',
-    icon: 'mdi-account-group',
+    icon: mdiAccountGroup,
     title: '場務組志工',
     company: 'SITCON 學生計算機年會 2024',
     period: '2024年'
   },
   {
     type: 'community',
-    icon: 'mdi-account-group',
+    icon: mdiAccountGroup,
     title: '學員',
     company: 'AWS STEM Summer Camp on The Cloud 2023',
     period: '2023年'
   },
   {
     type: 'community',
-    icon: 'mdi-account-group',
+    icon: mdiAccountGroup,
     title: '學員',
     company: '教育部先進資通安全實務人才培育計畫',
     period: '2023年'
   },
   {
     type: 'community',
-    icon: 'mdi-account-group',
+    icon: mdiAccountGroup,
     title: '學員',
     company: 'AIS3 Junior 2022',
     period: '2022年'
   }
 ])
 
+// 計算持續時間
+function calcDuration(period) {
+  const now = new Date()
+
+  const parseDate = (s) => {
+    s = s.trim()
+    if (s === '現在') return now
+    const ym = s.match(/(\d{4})年(\d{1,2})月/)
+    if (ym) return new Date(parseInt(ym[1]), parseInt(ym[2]) - 1)
+    const y = s.match(/(\d{4})年/)
+    if (y) return new Date(parseInt(y[1]), 0)
+    return now
+  }
+
+  const parts = period.split(' - ')
+  // 只有單一年份（如 "2023年"），不顯示持續時間
+  if (parts.length < 2) return null
+
+  const start = parseDate(parts[0])
+  const end = parseDate(parts[1])
+
+  let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth())
+  if (months < 1) months = 1
+  const years = Math.floor(months / 12)
+  const remainMonths = months % 12
+
+  if (years > 0 && remainMonths > 0) return `${years}年${remainMonths}個月`
+  if (years > 0) return `${years}年`
+  return `${remainMonths}個月`
+}
+
 const filteredExperience = computed(() => {
-  return experienceData.value.filter(item => item.type === currentExperienceFilter.value)
+  return experienceData.value
+    .filter(item => item.type === currentExperienceFilter.value)
+    .map(item => ({ ...item, duration: calcDuration(item.period) }))
 })
 
 
@@ -429,12 +434,10 @@ const scrollToSection = (sectionId) => {
   align-items: center;
   justify-content: center;
   position: relative;
-  background: linear-gradient(
-    135deg,
-    var(--color-bg-primary) 0%,
-    var(--color-bg-secondary) 50%,
-    var(--color-bg-primary) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--color-bg-primary) 0%,
+      var(--color-bg-secondary) 50%,
+      var(--color-bg-primary) 100%);
   padding: var(--spacing-xl);
 }
 
@@ -505,12 +508,19 @@ const scrollToSection = (sectionId) => {
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: rotate(45deg) translateY(0);
   }
+
   40% {
     transform: rotate(45deg) translateY(8px);
   }
+
   60% {
     transform: rotate(45deg) translateY(4px);
   }
@@ -936,7 +946,7 @@ const scrollToSection = (sectionId) => {
   .highlights-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .highlight-card.large {
     grid-column: span 2;
   }
@@ -946,55 +956,55 @@ const scrollToSection = (sectionId) => {
   .section {
     padding: var(--spacing-3xl) var(--spacing-md);
   }
-  
+
   .hero {
     padding: var(--spacing-lg);
     min-height: calc(100vh - 60px);
     padding-top: 80px;
   }
-  
+
   .hero-actions {
     flex-direction: column;
     width: 100%;
     max-width: 280px;
   }
-  
+
   .hero-actions .btn {
     width: 100%;
     min-height: var(--min-touch-target);
   }
-  
+
   .scroll-indicator {
     display: none;
   }
-  
+
   .projects-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .skills-cloud {
     gap: var(--spacing-sm);
   }
-  
+
   .skill-tag {
     font-size: var(--font-size-sm);
     padding: var(--spacing-xs) var(--spacing-md);
   }
-  
+
   .highlights-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .highlight-card.large,
   .highlight-card.medium,
   .highlight-card.small {
     grid-column: span 1;
   }
-  
+
   .contact-grid {
     grid-template-columns: 1fr;
   }
-  
+
   /* 確保聯絡卡片有足夠的點擊區域 */
   .contact-card {
     min-height: var(--min-touch-target);
@@ -1006,78 +1016,78 @@ const scrollToSection = (sectionId) => {
   .section {
     padding: var(--spacing-2xl) var(--spacing-sm);
   }
-  
+
   .hero {
     padding: var(--spacing-md);
     padding-top: 70px;
   }
-  
+
   .hero-name {
     font-size: clamp(2rem, 8vw, 2.5rem);
   }
-  
+
   .hero-role {
     font-size: clamp(1rem, 4vw, 1.25rem);
   }
-  
+
   .hero-tagline {
     font-size: var(--font-size-md);
   }
-  
+
   .hero-actions {
     max-width: 100%;
     padding: 0 var(--spacing-sm);
   }
-  
+
   /* 專案卡片優化 */
   .project-content {
     padding: var(--spacing-md);
   }
-  
+
   .project-name {
     font-size: var(--font-size-lg);
   }
-  
+
   .project-description {
     font-size: var(--font-size-sm);
   }
-  
+
   /* 技能區塊優化 */
   .skill-category {
     padding: var(--spacing-md);
   }
-  
+
   .category-name {
     font-size: var(--font-size-md);
   }
-  
+
   .skill-name {
     font-size: var(--font-size-sm);
   }
-  
+
   /* 亮點區塊優化 */
   .highlight-card {
     padding: var(--spacing-md);
   }
-  
+
   .highlight-title {
     font-size: var(--font-size-md);
   }
-  
+
   .highlight-description {
     font-size: var(--font-size-xs);
   }
-  
+
   /* 聯絡區塊優化 */
   .contact-intro {
     font-size: var(--font-size-md);
     padding: 0 var(--spacing-sm);
   }
-  
+
   .contact-card {
     padding: var(--spacing-md);
   }
-  
+
   .contact-value {
     font-size: var(--font-size-sm);
   }
@@ -1091,11 +1101,11 @@ const scrollToSection = (sectionId) => {
   .scroll-arrow {
     animation: none;
   }
-  
+
   .hero-role {
     transition: none;
   }
-  
+
   .project-card,
   .highlight-card,
   .contact-card,
@@ -1104,14 +1114,14 @@ const scrollToSection = (sectionId) => {
   .skip-link {
     transition: none;
   }
-  
+
   .project-card:hover,
   .highlight-card:hover,
   .contact-card:hover,
   .skill-tag:hover {
     transform: none;
   }
-  
+
   .back-to-top:hover {
     transform: none;
   }

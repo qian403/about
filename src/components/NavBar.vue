@@ -83,9 +83,6 @@ const toggleMenu = () => {
 const handleScroll = () => {
   // 更新滾動狀態
   isScrolled.value = window.scrollY > 50
-  
-  // 更新當前區塊
-  updateCurrentSection()
 }
 
 // 監聽視窗大小變化
@@ -97,23 +94,22 @@ const handleResize = () => {
   }
 }
 
-// 更新當前區塊高亮
-const updateCurrentSection = () => {
+// 使用 IntersectionObserver 追蹤當前區塊（避免 forced reflow）
+let sectionObserver = null
+
+const setupSectionObserver = () => {
   const sections = navLinks.map(link => document.getElementById(link.id)).filter(Boolean)
-  const scrollPosition = window.scrollY + 100
-  
-  for (let i = sections.length - 1; i >= 0; i--) {
-    const section = sections[i]
-    if (section.offsetTop <= scrollPosition) {
-      currentSection.value = section.id
-      return
+  if (!sections.length) return
+
+  sectionObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        currentSection.value = entry.target.id
+      }
     }
-  }
-  
-  // 如果在頂部，清除當前區塊
-  if (window.scrollY < 100) {
-    currentSection.value = ''
-  }
+  }, { rootMargin: '-20% 0px -70% 0px' })
+
+  sections.forEach(section => sectionObserver.observe(section))
 }
 
 // Handle escape key to close mobile menu
@@ -128,12 +124,17 @@ onMounted(() => {
   window.addEventListener('resize', handleResize, { passive: true })
   window.addEventListener('keydown', handleKeydown)
   handleScroll() // 初始化狀態
+  setupSectionObserver()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   window.removeEventListener('resize', handleResize)
   window.removeEventListener('keydown', handleKeydown)
+  if (sectionObserver) {
+    sectionObserver.disconnect()
+    sectionObserver = null
+  }
 })
 
 // 導出給測試使用
