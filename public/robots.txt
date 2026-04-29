@@ -3,12 +3,11 @@
 User-agent: *
 Allow: /
 
-# Crawl-delay for polite crawling
-Crawl-delay: 1
+# Block stale/invalid routes from previous site versions
+Disallow: /tags/
+Disallow: /tag/
+Disallow: /category/
+Disallow: /categories/
 
 # Sitemap location
 Sitemap: https://chien.dev/sitemap.xml
-
-# Block common bot paths (if any)
-Disallow: /api/
-Disallow: /*.json$

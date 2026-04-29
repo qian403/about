@@ -49,10 +49,10 @@
           target="_blank" 
           rel="noopener noreferrer"
           class="project-link"
-          :aria-label="`${project.name} Demo 連結`"
+          :aria-label="`${project.name} ${project.demoLabel || 'Demo'} 連結`"
         >
           <md-icon aria-hidden="true">open_in_new</md-icon>
-          Demo
+          {{ project.demoLabel || 'Demo' }}
         </a>
       </div>
     </div>

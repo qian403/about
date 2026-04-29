@@ -44,9 +44,10 @@
           <ProjectCard v-for="project in projects" :key="project.name" :project="project" role="listitem" />
         </div>
         <div class="more-projects">
-          <a href="https://github.com/qian403" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+          <button class="btn btn-secondary showcase-trigger" type="button" @click="openProjectShowcase">
+            <md-icon aria-hidden="true">auto_awesome</md-icon>
             更多專案
-          </a>
+          </button>
         </div>
       </div>
     </section>
@@ -119,6 +120,87 @@
       :tabindex="showBackToTop ? 0 : -1">
       <md-icon aria-hidden="true">keyboard_arrow_up</md-icon>
     </button>
+
+    <Teleport to="body">
+      <Transition name="showcase">
+        <div
+          v-if="isProjectShowcaseOpen"
+          class="project-showcase"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="project-showcase-title"
+          @click.self="closeProjectShowcase"
+        >
+          <div class="showcase-shell">
+            <div class="showcase-header">
+              <div>
+                <span class="showcase-kicker">PROJECT ARCHIVE</span>
+                <h2 id="project-showcase-title">專案作品展示</h2>
+              </div>
+              <button class="showcase-close" type="button" aria-label="關閉專案展示" @click="closeProjectShowcase">
+                <md-icon aria-hidden="true">close</md-icon>
+              </button>
+            </div>
+
+            <div class="showcase-stage" aria-label="專案展示列表">
+              <article
+                v-for="(project, index) in projects"
+                :key="project.name"
+                class="showcase-project"
+                :style="{ '--project-index': index }"
+              >
+                <div class="showcase-project-media">
+                  <picture v-if="project.image">
+                    <source :srcset="project.image.replace('.png', '.webp')" type="image/webp" />
+                    <img :src="project.image" :alt="`${project.name} 專案截圖`" loading="lazy" />
+                  </picture>
+                  <div v-else class="showcase-project-icon" aria-hidden="true">
+                    <md-icon>terminal</md-icon>
+                  </div>
+                </div>
+
+                <div class="showcase-project-body">
+                  <div class="showcase-project-number">{{ String(index + 1).padStart(2, '0') }}</div>
+                  <h3>{{ project.name }}</h3>
+                  <p>{{ project.description }}</p>
+                  <div class="showcase-tags" aria-label="使用技術">
+                    <span v-for="tag in project.tags" :key="tag">{{ tag }}</span>
+                  </div>
+                  <div class="showcase-actions">
+                    <a
+                      v-if="project.github"
+                      :href="project.github"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="showcase-link"
+                    >
+                      GitHub
+                    </a>
+                    <a
+                      v-if="project.demo"
+                      :href="project.demo"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="showcase-link primary"
+                    >
+                      {{ project.demoLabel || 'Demo' }}
+                    </a>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="showcase-footer">
+              <span>完整原始碼與更多實驗作品</span>
+              <a href="https://github.com/qian403" target="_blank" rel="noopener noreferrer" class="showcase-github">
+                前往 GitHub
+                <md-icon aria-hidden="true">arrow_forward</md-icon>
+              </a>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </main>
 </template>
 
@@ -137,13 +219,21 @@ const roles = ['Backend Developer', 'Security Enthusiast']
 const currentRole = ref(roles[0])
 let roleIndex = 0
 let roleInterval = null
+let lockedScrollY = 0
 
 // 回到頂部按鈕狀態
 const showBackToTop = ref(false)
+const isProjectShowcaseOpen = ref(false)
 
 // 處理滾動事件
 const handleScroll = () => {
   showBackToTop.value = window.scrollY > 300
+}
+
+const handleKeydown = (event) => {
+  if (event.key === 'Escape' && isProjectShowcaseOpen.value) {
+    closeProjectShowcase()
+  }
 }
 
 // 滾動到頂部
@@ -156,6 +246,30 @@ const goToCV = () => {
   router.push('/cv')
 }
 
+const openProjectShowcase = () => {
+  lockedScrollY = window.scrollY
+  isProjectShowcaseOpen.value = true
+  document.documentElement.style.overflow = 'hidden'
+  document.body.style.overflow = 'hidden'
+  document.body.style.position = 'fixed'
+  document.body.style.top = `-${lockedScrollY}px`
+  document.body.style.left = '0'
+  document.body.style.right = '0'
+  document.body.style.width = '100%'
+}
+
+const closeProjectShowcase = () => {
+  isProjectShowcaseOpen.value = false
+  document.documentElement.style.overflow = ''
+  document.body.style.overflow = ''
+  document.body.style.position = ''
+  document.body.style.top = ''
+  document.body.style.left = ''
+  document.body.style.right = ''
+  document.body.style.width = ''
+  window.scrollTo({ top: lockedScrollY, behavior: 'auto' })
+}
+
 onMounted(() => {
   roleInterval = setInterval(() => {
     roleIndex = (roleIndex + 1) % roles.length
@@ -164,6 +278,7 @@ onMounted(() => {
 
   // 監聽滾動事件
   window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('keydown', handleKeydown)
 })
 
 onUnmounted(() => {
@@ -171,6 +286,14 @@ onUnmounted(() => {
     clearInterval(roleInterval)
   }
   window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('keydown', handleKeydown)
+  document.documentElement.style.overflow = ''
+  document.body.style.overflow = ''
+  document.body.style.position = ''
+  document.body.style.top = ''
+  document.body.style.left = ''
+  document.body.style.right = ''
+  document.body.style.width = ''
 })
 
 // 專案資料
@@ -180,7 +303,8 @@ const projects = ref([
     description: '實用網頁工具集',
     tags: ['Web', 'Tools'],
     github: 'https://github.com/qian403/web-tools',
-    demo: null,
+    demo: 'https://tools.chien.dev',
+    demoLabel: '前往網站',
     image: '/tools.png'
   },
   {
@@ -621,6 +745,353 @@ const scrollToSection = (sectionId) => {
   margin-top: var(--spacing-2xl);
 }
 
+.showcase-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  border-color: rgba(100, 181, 246, 0.45);
+  position: relative;
+  overflow: hidden;
+}
+
+.showcase-trigger::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(100, 181, 246, 0.18), transparent);
+  transform: translateX(-110%);
+  transition: transform 600ms var(--ease-out);
+}
+
+.showcase-trigger:hover::before {
+  transform: translateX(110%);
+}
+
+.showcase-trigger md-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.project-showcase {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  background:
+    linear-gradient(rgba(100, 181, 246, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100, 181, 246, 0.05) 1px, transparent 1px),
+    rgba(6, 17, 29, 0.9);
+  background-size: 28px 28px, 28px 28px, auto;
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+}
+
+.project-showcase::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, rgba(100, 181, 246, 0.08) 50%, transparent 100%);
+  animation: showcase-scan 5s linear infinite;
+}
+
+.showcase-shell {
+  width: min(1120px, 100%);
+  max-height: min(760px, calc(100vh - 2rem));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(232, 244, 248, 0.22);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, rgba(232, 244, 248, 0.14), rgba(13, 27, 42, 0.58) 42%, rgba(30, 48, 68, 0.44));
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5), 0 0 48px rgba(79, 195, 247, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  position: relative;
+}
+
+.showcase-shell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 28%, rgba(100, 181, 246, 0.08) 72%, transparent);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.showcase-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  border-bottom: 1px solid rgba(144, 202, 249, 0.18);
+}
+
+.showcase-kicker {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-primary-light);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0;
+}
+
+.showcase-header h2 {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-tight);
+}
+
+.showcase-close {
+  width: var(--min-touch-target);
+  height: var(--min-touch-target);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(232, 244, 248, 0.18);
+  border-radius: var(--radius-md);
+  background: rgba(232, 244, 248, 0.08);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  backdrop-filter: blur(12px) saturate(130%);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast) var(--ease-out);
+}
+
+.showcase-close:hover {
+  border-color: var(--color-primary);
+  background: rgba(100, 181, 246, 0.16);
+}
+
+.showcase-stage {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  overflow-y: auto;
+}
+
+.showcase-project {
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(232, 244, 248, 0.16);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(155deg, rgba(232, 244, 248, 0.12), rgba(30, 48, 68, 0.5) 46%, rgba(13, 27, 42, 0.48));
+  -webkit-backdrop-filter: blur(18px) saturate(145%);
+  backdrop-filter: blur(18px) saturate(145%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  animation: project-rise 520ms var(--ease-out) backwards;
+  animation-delay: calc(110ms + var(--project-index) * 120ms);
+  transition: border-color var(--transition-normal) var(--ease-out), box-shadow var(--transition-normal) var(--ease-out), transform var(--transition-normal) var(--ease-out);
+}
+
+.showcase-project:hover {
+  border-color: rgba(144, 202, 249, 0.65);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32), 0 0 28px rgba(79, 195, 247, 0.14);
+}
+
+.showcase-project-media {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(135deg, rgba(232, 244, 248, 0.12), rgba(100, 181, 246, 0.16)),
+    rgba(42, 63, 84, 0.46);
+  border-bottom: 1px solid rgba(232, 244, 248, 0.12);
+}
+
+.showcase-project-media picture,
+.showcase-project-media img {
+  width: 100%;
+  height: 100%;
+}
+
+.showcase-project-media img {
+  object-fit: cover;
+}
+
+.showcase-project-icon {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(232, 244, 248, 0.2);
+  border-radius: var(--radius-lg);
+  background: rgba(232, 244, 248, 0.08);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  color: var(--color-primary-light);
+}
+
+.showcase-project-icon md-icon {
+  font-size: 36px;
+  width: 36px;
+  height: 36px;
+}
+
+.showcase-project-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: var(--spacing-lg);
+  position: relative;
+}
+
+.showcase-project-number {
+  align-self: flex-start;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-primary-light);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.showcase-project h3 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-tight);
+}
+
+.showcase-project p {
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-md);
+}
+
+.showcase-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.showcase-tags span {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid rgba(232, 244, 248, 0.14);
+  border-radius: var(--radius-sm);
+  background: rgba(232, 244, 248, 0.07);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  backdrop-filter: blur(10px) saturate(130%);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.showcase-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: auto;
+}
+
+.showcase-link,
+.showcase-github {
+  min-height: var(--min-touch-target);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid rgba(232, 244, 248, 0.18);
+  border-radius: var(--radius-md);
+  background: rgba(232, 244, 248, 0.07);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  backdrop-filter: blur(12px) saturate(130%);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+  transition: all var(--transition-fast) var(--ease-out);
+}
+
+.showcase-link:hover,
+.showcase-github:hover {
+  border-color: var(--color-primary);
+  background: rgba(100, 181, 246, 0.12);
+  color: var(--color-primary-light);
+}
+
+.showcase-link.primary {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+}
+
+.showcase-link.primary:hover {
+  background: var(--color-primary-light);
+  color: var(--color-on-primary);
+}
+
+.showcase-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-top: 1px solid rgba(144, 202, 249, 0.18);
+  color: var(--color-text-secondary);
+}
+
+.showcase-github md-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.showcase-enter-active,
+.showcase-leave-active {
+  transition: opacity 260ms var(--ease-out);
+}
+
+.showcase-enter-from,
+.showcase-leave-to {
+  opacity: 0;
+}
+
+.showcase-enter-active .showcase-shell,
+.showcase-leave-active .showcase-shell {
+  transition: transform 320ms var(--ease-out), opacity 320ms var(--ease-out);
+}
+
+.showcase-enter-from .showcase-shell,
+.showcase-leave-to .showcase-shell {
+  opacity: 0;
+  transform: translateY(18px) scale(0.98);
+}
+
+@keyframes project-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes showcase-scan {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
+}
+
 .project-card {
   background-color: var(--color-bg-card);
   border: 1px solid var(--color-border);
@@ -950,6 +1421,10 @@ const scrollToSection = (sectionId) => {
   .highlight-card.large {
     grid-column: span 2;
   }
+
+  .showcase-stage {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
@@ -980,6 +1455,38 @@ const scrollToSection = (sectionId) => {
 
   .projects-grid {
     grid-template-columns: 1fr;
+  }
+
+  .project-showcase {
+    align-items: stretch;
+    padding: var(--spacing-md);
+  }
+
+  .showcase-shell {
+    max-height: calc(100vh - 2rem);
+  }
+
+  .showcase-header,
+  .showcase-stage,
+  .showcase-footer {
+    padding: var(--spacing-lg);
+  }
+
+  .showcase-header h2 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .showcase-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .showcase-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .showcase-github {
+    width: 100%;
   }
 
   .skills-cloud {
@@ -1052,6 +1559,30 @@ const scrollToSection = (sectionId) => {
     font-size: var(--font-size-sm);
   }
 
+  .showcase-header {
+    gap: var(--spacing-md);
+  }
+
+  .showcase-project {
+    min-height: auto;
+  }
+
+  .showcase-project-media {
+    height: 136px;
+  }
+
+  .showcase-project-body {
+    padding: var(--spacing-md);
+  }
+
+  .showcase-actions {
+    flex-direction: column;
+  }
+
+  .showcase-link {
+    width: 100%;
+  }
+
   /* 技能區塊優化 */
   .skill-category {
     padding: var(--spacing-md);
@@ -1102,6 +1633,16 @@ const scrollToSection = (sectionId) => {
     animation: none;
   }
 
+  .project-showcase::before,
+  .showcase-project {
+    animation: none;
+  }
+
+  .showcase-project {
+    opacity: 1;
+    transform: none;
+  }
+
   .hero-role {
     transition: none;
   }
@@ -1111,14 +1652,19 @@ const scrollToSection = (sectionId) => {
   .contact-card,
   .skill-tag,
   .back-to-top,
-  .skip-link {
+  .skip-link,
+  .showcase-trigger,
+  .showcase-close,
+  .showcase-link,
+  .showcase-github {
     transition: none;
   }
 
   .project-card:hover,
   .highlight-card:hover,
   .contact-card:hover,
-  .skill-tag:hover {
+  .skill-tag:hover,
+  .showcase-project:hover {
     transform: none;
   }
 

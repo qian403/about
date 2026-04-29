@@ -3,6 +3,12 @@ import vue from '@vitejs/plugin-vue'
 import vuetify from 'vite-plugin-vuetify'
 import path from 'path'
 
+const sassOptions = {
+  api: 'modern-compiler',
+  quietDeps: true,
+  silenceDeprecations: ['if-function']
+}
+
 export default defineConfig({
   plugins: [
     vue({
@@ -22,6 +28,12 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src')
     }
   },
+  css: {
+    preprocessorOptions: {
+      sass: sassOptions,
+      scss: sassOptions
+    }
+  },
   build: {
     rollupOptions: {
       output: {
@@ -37,4 +49,4 @@ export default defineConfig({
     port: 3000,
     open: true
   }
-}) 
+})
