@@ -72,22 +72,18 @@ defineOptions({
 .timeline-container {
     position: relative;
     width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 1rem 0 1rem 24px;
+    max-width: 680px;
+    margin: 0;
+    padding: 0.5rem 0 0.5rem 24px;
 }
 
 .timeline-line {
     position: absolute;
     left: 30px;
-    top: 1rem;
-    bottom: 1rem;
-    width: 2px;
-    background: linear-gradient(
-        to bottom,
-        var(--color-primary, #64b5f6) 0%,
-        var(--color-border, #2a4a5e) 100%
-    );
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 1px;
+    background: var(--color-border, rgba(0,0,0,0.1));
     border-radius: 2px;
 }
 
@@ -110,13 +106,13 @@ defineOptions({
     position: absolute;
     left: 0;
     top: 18px;
-    width: 14px;
-    height: 14px;
-    background: var(--color-primary, #64b5f6);
-    border: 3px solid var(--color-bg-primary, #0d1b2a);
+    width: 8px;
+    height: 8px;
+    background: var(--color-text, #111);
+    border: 1.5px solid var(--color-bg, #fff);
     border-radius: 50%;
     z-index: 10;
-    box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+    box-shadow: 0 0 0 1px var(--color-border-strong, rgba(0,0,0,0.2));
 }
 
 .timeline-content {
@@ -124,96 +120,68 @@ defineOptions({
 }
 
 .timeline-card-compact {
-    background: var(--color-bg-card, #1e3044);
-    border: 1px solid var(--color-border, #2a4a5e);
-    border-radius: 12px;
-    padding: 1rem 1.25rem;
-    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--color-border, rgba(0,0,0,0.1));
+    border-radius: var(--radius-lg, 10px);
+    padding: 0.875rem 1.125rem;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
     position: relative;
 }
 
-.timeline-card-compact::before {
-    content: '';
-    position: absolute;
-    left: -8px;
-    top: 18px;
-    width: 0;
-    height: 0;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-right: 8px solid var(--color-border, #2a4a5e);
-}
-
-.timeline-card-compact::after {
-    content: '';
-    position: absolute;
-    left: -6px;
-    top: 19px;
-    width: 0;
-    height: 0;
-    border-top: 7px solid transparent;
-    border-bottom: 7px solid transparent;
-    border-right: 7px solid var(--color-bg-card, #1e3044);
-}
-
 .timeline-card-compact:hover {
-    border-color: var(--color-primary, #64b5f6);
-    transform: translateX(4px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.timeline-card-compact:hover::before {
-    border-right-color: var(--color-primary, #64b5f6);
+    border-color: var(--color-border-strong, rgba(0,0,0,0.2));
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.06));
 }
 
 .timeline-title-compact {
-    font-size: 1.0625rem;
+    font-size: 0.9375rem;
     font-weight: 600;
-    color: var(--color-text-primary, #e8f4f8);
+    color: var(--color-text, #111);
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
 .timeline-icon-compact {
-    color: var(--color-primary, #64b5f6);
-    font-size: 1.125rem;
+    color: var(--color-text-muted, #999);
+    font-size: 1rem;
+    flex-shrink: 0;
 }
 
 .timeline-company-compact {
-    font-size: 0.9rem;
-    color: var(--color-primary, #64b5f6);
-    font-weight: 500;
-    margin-top: 0.375rem;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #555);
+    font-weight: 400;
+    margin-top: 0.25rem;
 }
 
 .timeline-description-compact {
     font-size: 0.875rem;
-    color: var(--color-text-secondary, #a8c5d8);
+    color: var(--color-text-secondary, #555);
     line-height: 1.5;
-    margin-top: 0.5rem;
+    margin-top: 0.375rem;
 }
 
 .timeline-period-compact {
-    font-size: 0.8rem;
-    color: var(--color-text-muted, #6b8a9e);
-    font-weight: 500;
-    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #999);
+    font-weight: 400;
+    margin-top: 0.375rem;
     display: flex;
     align-items: center;
     gap: 0.25rem;
 }
 
 .timeline-duration {
-    color: var(--color-text-secondary, #a8c5d8);
+    color: var(--color-text-secondary, #555);
     font-weight: 400;
 }
 
 .timeline-duration-compact {
-    font-size: 0.8rem;
-    color: var(--color-text-secondary, #a8c5d8);
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #999);
     font-weight: 400;
-    margin-top: 0.25rem;
+    margin-top: 0.2rem;
 }
 
 

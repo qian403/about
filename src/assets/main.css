@@ -1,6 +1,3 @@
-/* Fonts are loaded asynchronously in index.html */
-
-/* Font fallback to reduce layout shift */
 @font-face {
   font-family: 'Inter fallback';
   src: local('Arial');
@@ -10,125 +7,78 @@
   size-adjust: 107%;
 }
 
-/* ========================================
-   Portfolio Redesign - 設計系統
-   簡潔、專業、深色科技風格
-   ======================================== */
-
 :root {
-  /* 主色系 - 深色科技風格 */
-  --color-primary: #64b5f6;
-  --color-primary-light: #90caf9;
-  --color-primary-dark: #42a5f5;
-  --color-on-primary: #0d1b2a;
-  
-  /* 背景色系 */
-  --color-bg-primary: #0d1b2a;
-  --color-bg-secondary: #1b2838;
-  --color-bg-tertiary: #2a3f54;
-  --color-bg-card: #1e3044;
-  
-  /* 文字色系 */
-  --color-text-primary: #e8f4f8;
-  --color-text-secondary: #a8c5d8;
-  --color-text-muted: #6b8a9e;
-  
-  /* 邊框色 */
-  --color-border: #2a4a5e;
-  --color-border-light: #3a5a6e;
-  
-  /* 強調色 */
-  --color-accent: #4fc3f7;
-  --color-accent-secondary: #81d4fa;
-  
-  /* 類別色彩 - 時間軸用 */
-  --color-work: #64b5f6;
-  --color-education: #81c784;
-  --color-community: #ffb74d;
-  --color-competition: #f06292;
-  
-  /* 狀態色 */
-  --color-success: #66bb6a;
-  --color-error: #ef5350;
-  --color-warning: #ffa726;
-  
-  /* 間距系統 */
-  --spacing-xs: 0.25rem;   /* 4px */
-  --spacing-sm: 0.5rem;    /* 8px */
-  --spacing-md: 1rem;      /* 16px */
-  --spacing-lg: 1.5rem;    /* 24px */
-  --spacing-xl: 2rem;      /* 32px */
-  --spacing-2xl: 3rem;     /* 48px */
-  --spacing-3xl: 4rem;     /* 64px */
-  --spacing-4xl: 6rem;     /* 96px */
-  
-  /* 圓角系統 */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 24px;
+  --grid-line: rgba(0, 0, 0, 0.055);
+  --grid-size: 28px;
+
+  --color-bg: #ffffff;
+  --color-text: #111111;
+  --color-text-secondary: #555555;
+  --color-text-muted: #999999;
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-border-strong: rgba(0, 0, 0, 0.2);
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 5rem;
+  --spacing-4xl: 7rem;
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
   --radius-full: 9999px;
-  
-  /* 陰影系統 */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.25);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.3);
-  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.35);
-  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.4);
-  
-  /* 字體大小 */
-  --font-size-xs: 0.75rem;   /* 12px */
-  --font-size-sm: 0.875rem;  /* 14px */
-  --font-size-md: 1rem;      /* 16px */
-  --font-size-lg: 1.125rem;  /* 18px */
-  --font-size-xl: 1.25rem;   /* 20px */
-  --font-size-2xl: 1.5rem;   /* 24px */
-  --font-size-3xl: 2rem;     /* 32px */
-  --font-size-4xl: 2.5rem;   /* 40px */
-  --font-size-5xl: 3rem;     /* 48px */
-  --font-size-6xl: 3.5rem;   /* 56px */
-  
-  /* 行高 */
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.1);
+
+  --font-size-xs: 0.72rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.375rem;
+  --font-size-2xl: 1.75rem;
+  --font-size-3xl: 2.5rem;
+  --font-size-4xl: 3.5rem;
+
   --line-height-tight: 1.2;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.7;
-  
-  /* 字重 */
+
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
-  
-  /* 動畫時間 */
+
   --transition-fast: 150ms;
   --transition-normal: 250ms;
-  --transition-slow: 400ms;
-  
-  /* 動畫曲線 */
   --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* 最小互動元素尺寸 (無障礙) */
+
   --min-touch-target: 44px;
-  
-  /* 最大內容寬度 */
-  --max-width-content: 1200px;
-  --max-width-narrow: 800px;
+  --max-width-content: 1080px;
+  --color-bg-alt: rgba(0, 0, 0, 0.018);
 }
 
-/* ========================================
-   全局樣式重置
-   ======================================== */
-
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 html {
@@ -136,25 +86,10 @@ html {
   font-size: 16px;
 }
 
-/* 尊重使用者的動畫偏好 */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
 body {
   font-family: 'Inter', 'Inter fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   line-height: var(--line-height-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -166,325 +101,100 @@ body {
   min-height: 100vh;
 }
 
-/* ========================================
-   滾動條樣式
-   ======================================== */
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  pointer-events: none;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--color-bg-secondary);
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.3); }
 
-::-webkit-scrollbar-thumb {
-  background: var(--color-border-light);
-  border-radius: var(--radius-full);
-}
+::selection { background: rgba(37, 99, 235, 0.15); color: var(--color-text); }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary);
-}
-
-/* ========================================
-   選擇文字樣式
-   ======================================== */
-
-::selection {
-  background: rgba(100, 181, 246, 0.3);
-  color: var(--color-text-primary);
-}
-
-/* ========================================
-   Focus 樣式 (無障礙)
-   ======================================== */
-
-:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-/* ========================================
-   連結樣式
-   ======================================== */
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
 a {
-  color: var(--color-primary);
+  color: var(--color-accent);
   text-decoration: none;
   transition: color var(--transition-fast) var(--ease-out);
 }
 
-a:hover {
-  color: var(--color-primary-light);
-}
-
-/* ========================================
-   容器
-   ======================================== */
+a:hover { color: var(--color-accent-hover); }
 
 .container {
   width: 100%;
   max-width: var(--max-width-content);
   margin: 0 auto;
-  padding: 0 var(--spacing-lg);
+  padding: 0 var(--spacing-xl);
 }
 
 @media (max-width: 768px) {
-  .container {
-    padding: 0 var(--spacing-md);
-  }
+  .container { padding: 0 var(--spacing-md); }
 }
-
-/* ========================================
-   區塊標題
-   ======================================== */
-
-.section-title {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  text-align: center;
-  margin-bottom: var(--spacing-3xl);
-}
-
-@media (max-width: 768px) {
-  .section-title {
-    font-size: var(--font-size-2xl);
-    margin-bottom: var(--spacing-2xl);
-  }
-}
-
-/* ========================================
-   按鈕樣式
-   ======================================== */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-lg);
+  padding: 0.6rem var(--spacing-lg);
   min-height: var(--min-touch-target);
-  min-width: var(--min-touch-target);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   border-radius: var(--radius-md);
-  border: none;
+  border: 1px solid var(--color-border-strong);
   cursor: pointer;
-  transition: all var(--transition-normal) var(--ease-out);
+  transition: all var(--transition-fast) var(--ease-out);
   text-decoration: none;
+  background: transparent;
+  color: var(--color-text);
+  font-family: inherit;
+}
+
+.btn:hover {
+  background: var(--color-text);
+  border-color: var(--color-text);
+  color: #ffffff;
 }
 
 .btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
+  background: var(--color-text);
+  color: #ffffff;
+  border-color: var(--color-text);
 }
 
 .btn-primary:hover {
-  background-color: var(--color-primary-light);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(100, 181, 246, 0.3);
+  background: #333333;
+  border-color: #333333;
+  color: #ffffff;
 }
-
-.btn-secondary {
-  background-color: transparent;
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary);
-}
-
-.btn-secondary:hover {
-  background-color: rgba(100, 181, 246, 0.1);
-  transform: translateY(-2px);
-}
-
-/* ========================================
-   卡片樣式
-   ======================================== */
-
-.card {
-  background-color: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  transition: all var(--transition-normal) var(--ease-out);
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-card-hover);
-  border-color: var(--color-border-light);
-}
-
-/* ========================================
-   標籤樣式
-   ======================================== */
 
 .tag {
   display: inline-block;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background-color: rgba(100, 181, 246, 0.15);
-  color: var(--color-primary);
+  padding: 2px 8px;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  background: rgba(255,255,255,0.6);
+  letter-spacing: 0.01em;
 }
-
-/* ========================================
-   動畫
-   ======================================== */
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn var(--transition-slow) var(--ease-out);
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp var(--transition-slow) var(--ease-out);
-}
-
-.animate-slide-in-left {
-  animation: slideInLeft var(--transition-slow) var(--ease-out);
-}
-
-/* ========================================
-   工具類
-   ======================================== */
-
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
-
-.text-primary { color: var(--color-text-primary); }
-.text-secondary { color: var(--color-text-secondary); }
-.text-muted { color: var(--color-text-muted); }
-.text-accent { color: var(--color-primary); }
-
-.font-normal { font-weight: var(--font-weight-normal); }
-.font-medium { font-weight: var(--font-weight-medium); }
-.font-semibold { font-weight: var(--font-weight-semibold); }
-.font-bold { font-weight: var(--font-weight-bold); }
-
-/* 間距工具類 */
-.mt-1 { margin-top: var(--spacing-xs); }
-.mt-2 { margin-top: var(--spacing-sm); }
-.mt-3 { margin-top: var(--spacing-md); }
-.mt-4 { margin-top: var(--spacing-lg); }
-.mt-5 { margin-top: var(--spacing-xl); }
-
-.mb-1 { margin-bottom: var(--spacing-xs); }
-.mb-2 { margin-bottom: var(--spacing-sm); }
-.mb-3 { margin-bottom: var(--spacing-md); }
-.mb-4 { margin-bottom: var(--spacing-lg); }
-.mb-5 { margin-bottom: var(--spacing-xl); }
-
-.p-1 { padding: var(--spacing-xs); }
-.p-2 { padding: var(--spacing-sm); }
-.p-3 { padding: var(--spacing-md); }
-.p-4 { padding: var(--spacing-lg); }
-.p-5 { padding: var(--spacing-xl); }
-
-/* ========================================
-   網格系統
-   ======================================== */
-
-.grid {
-  display: grid;
-  gap: var(--spacing-lg);
-}
-
-.grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
-.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
-
-@media (max-width: 1024px) {
-  .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
-  .grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 768px) {
-  .grid-cols-4,
-  .grid-cols-3,
-  .grid-cols-2 {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ========================================
-   Flexbox 工具類
-   ======================================== */
-
-.flex { display: flex; }
-.flex-col { flex-direction: column; }
-.flex-wrap { flex-wrap: wrap; }
-.items-center { align-items: center; }
-.items-start { align-items: flex-start; }
-.items-end { align-items: flex-end; }
-.justify-center { justify-content: center; }
-.justify-between { justify-content: space-between; }
-.justify-start { justify-content: flex-start; }
-.justify-end { justify-content: flex-end; }
-.gap-1 { gap: var(--spacing-xs); }
-.gap-2 { gap: var(--spacing-sm); }
-.gap-3 { gap: var(--spacing-md); }
-.gap-4 { gap: var(--spacing-lg); }
-.gap-5 { gap: var(--spacing-xl); }
-
-/* ========================================
-   隱藏/顯示工具類
-   ======================================== */
-
-.hidden { display: none !important; }
-
-@media (max-width: 768px) {
-  .hidden-mobile { display: none !important; }
-}
-
-@media (min-width: 769px) {
-  .hidden-desktop { display: none !important; }
-}
-
-/* ========================================
-   Material Icons 樣式
-   ======================================== */
 
 md-icon, .material-icons {
   font-family: 'Material Icons';
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -498,62 +208,5 @@ md-icon, .material-icons {
   word-wrap: normal;
   direction: ltr;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-/* ========================================
-   響應式設計 - 手機版優化
-   Requirements: 8.1, 8.3, 6.5
-   ======================================== */
-
-/* 小螢幕斷點 */
-@media (max-width: 480px) {
-  :root {
-    --spacing-lg: 1rem;
-    --spacing-xl: 1.5rem;
-    --spacing-2xl: 2rem;
-    --spacing-3xl: 2.5rem;
-    --spacing-4xl: 3rem;
-  }
-  
-  .container {
-    padding: 0 var(--spacing-sm);
-  }
-  
-  .section-title {
-    font-size: var(--font-size-xl);
-    margin-bottom: var(--spacing-xl);
-  }
-  
-  .btn {
-    padding: var(--spacing-sm) var(--spacing-md);
-    font-size: var(--font-size-sm);
-  }
-}
-
-/* 確保所有互動元素在觸控裝置上易於點擊 */
-@media (max-width: 768px) {
-  /* 確保按鈕最小尺寸 */
-  .btn,
-  button,
-  [role="button"],
-  a.btn {
-    min-height: var(--min-touch-target);
-    min-width: var(--min-touch-target);
-  }
-  
-  /* 確保連結有足夠的點擊區域 */
-  a:not(.btn) {
-    display: inline-block;
-    padding: var(--spacing-xs) 0;
-    min-height: var(--min-touch-target);
-    line-height: calc(var(--min-touch-target) - var(--spacing-xs) * 2);
-  }
-  
-  /* 標籤元素點擊區域 */
-  .tag {
-    min-height: 32px;
-    display: inline-flex;
-    align-items: center;
-  }
+  overflow: visible;
 }

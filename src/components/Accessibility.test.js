@@ -23,7 +23,7 @@ const mockMdIcon = {
 const SEMANTIC_TAGS = ['main', 'header', 'nav', 'section', 'article', 'aside', 'footer']
 
 // Section IDs that should exist in the page
-const SECTION_IDS = ['projects', 'skills', 'highlights', 'experience', 'contact']
+const SECTION_IDS = ['projects', 'skills', 'experience', 'contact']
 
 describe('Property 9: 無障礙標準符合性', () => {
   /**

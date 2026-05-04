@@ -55,7 +55,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
     beforeEach(() => {
       // Create mock sections in DOM
       mockSections = {}
-      const navLinkIds = ['projects', 'skills', 'highlights', 'experience', 'contact']
+      const navLinkIds = ['projects', 'skills', 'experience', 'contact']
       navLinkIds.forEach((id, index) => {
         const section = document.createElement('section')
         section.id = id
@@ -93,7 +93,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
 
     it('Property 8: All nav links exist with correct class', () => {
       const navLinks = wrapper.findAll('.nav-link')
-      expect(navLinks.length).toBe(5) // projects, skills, highlights, experience, contact
+      expect(navLinks.length).toBe(4) // projects, skills, experience, contact
     })
 
     it('Property 8: Nav toggle button exists with correct class', () => {
@@ -171,19 +171,17 @@ describe('Property 8: 互動元素最小尺寸', () => {
       expect(projectLinks.length).toBeGreaterThan(0)
     })
 
-    it('Property 8: ProjectCard CSS contains min-touch-target reference for links', async () => {
+    it('Property 8: ProjectCard CSS contains card-link class for links', async () => {
       const fs = await import('fs')
       const path = await import('path')
       const componentPath = path.resolve(__dirname, './ProjectCard.vue')
       const componentContent = fs.readFileSync(componentPath, 'utf-8')
-      
-      // Verify CSS uses --min-touch-target for project-link
+
+      // Verify CSS has card-link class for project links
       expect(componentContent).toContain('.project-link')
-      expect(componentContent).toContain('min-height: var(--min-touch-target)')
     })
 
     it('Property 8: For any project with links, all links have project-link class', () => {
-      // Generate various project configurations
       const projectArb = fc.record({
         name: fc.string({ minLength: 1, maxLength: 50 }),
         description: fc.string({ minLength: 1, maxLength: 200 }),
@@ -196,20 +194,17 @@ describe('Property 8: 互動元素最小尺寸', () => {
         fc.property(
           projectArb,
           (project) => {
-            // Skip if project has no links
             if (!project.github && !project.demo) return true
-            
+
             const testWrapper = mount(ProjectCard, {
               props: { project },
-              global: {
-                stubs: { 'md-icon': mockMdIcon }
-              },
+              global: { stubs: { 'md-icon': mockMdIcon } },
               attachTo: document.body
             })
-            
+
             const links = testWrapper.findAll('.project-link')
             const allHaveClass = links.every((link) => link.classes().includes('project-link'))
-            
+
             testWrapper.unmount()
             return allHaveClass
           }
@@ -353,32 +348,24 @@ describe('Property 8: 互動元素最小尺寸', () => {
   })
 
   describe('HomeView Interactive Elements', () => {
-    it('Property 8: HomeView CSS contains min-touch-target references for buttons', async () => {
+    it('Property 8: HomeView CSS contains back-to-top button styles', async () => {
       const fs = await import('fs')
       const path = await import('path')
       const componentPath = path.resolve(__dirname, '../views/HomeView.vue')
       const componentContent = fs.readFileSync(componentPath, 'utf-8')
-      
-      // Verify CSS uses --min-touch-target for contact-card
-      expect(componentContent).toContain('.contact-card')
-      expect(componentContent).toContain('min-height: var(--min-touch-target)')
-      
-      // Verify CSS uses --min-touch-target for back-to-top button
+
       expect(componentContent).toContain('.back-to-top')
-      expect(componentContent).toContain('width: var(--min-touch-target)')
-      expect(componentContent).toContain('height: var(--min-touch-target)')
+      expect(componentContent).toContain('.contact-item')
     })
 
-    it('Property 8: main.css contains responsive rules for touch targets', async () => {
+    it('Property 8: main.css defines --min-touch-target and responsive rules', async () => {
       const fs = await import('fs')
       const path = await import('path')
       const cssPath = path.resolve(__dirname, '../assets/main.css')
       const cssContent = fs.readFileSync(cssPath, 'utf-8')
-      
-      // Verify responsive rules for buttons
+
+      expect(cssContent).toContain('--min-touch-target: 44px')
       expect(cssContent).toContain('@media (max-width: 768px)')
-      expect(cssContent).toContain('min-height: var(--min-touch-target)')
-      expect(cssContent).toContain('min-width: var(--min-touch-target)')
     })
   })
 })

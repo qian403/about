@@ -1,53 +1,49 @@
 <template>
   <nav class="navbar" :class="{ scrolled: isScrolled, 'menu-open': isMenuOpen }" role="navigation" aria-label="主要導航">
-    <div class="nav-container">
-      <a href="#" class="nav-brand" @click.prevent="scrollToTop" aria-label="回到首頁"></a>
-      
-      <div 
-        class="nav-links" 
+    <div class="nav-inner">
+      <a href="#" class="nav-brand" @click.prevent="scrollToTop" aria-label="回到首頁">
+        chien.dev
+      </a>
+
+      <div
+        class="nav-links"
         :class="{ open: isMenuOpen }"
         role="menubar"
-        :aria-hidden="!isMenuOpen && isMobile ? 'true' : 'false'"
       >
-        <a 
-          v-for="link in navLinks" 
+        <a
+          v-for="link in navLinks"
           :key="link.id"
           :href="`#${link.id}`"
           class="nav-link"
           :class="{ active: currentSection === link.id }"
           role="menuitem"
-          :aria-current="currentSection === link.id ? 'true' : undefined"
           @click.prevent="handleNavClick(link.id)"
-          @keydown.enter.prevent="handleNavClick(link.id)"
-        >
-          {{ link.label }}
-        </a>
+        >{{ link.label }}</a>
       </div>
-      
-      <button 
-        class="nav-toggle" 
-        @click="toggleMenu" 
+
+      <button
+        class="nav-toggle"
+        @click="toggleMenu"
         :aria-expanded="isMenuOpen"
         aria-label="Toggle navigation menu"
-        aria-controls="mobile-nav"
         type="button"
       >
-        <span class="hamburger-line" aria-hidden="true"></span>
-        <span class="hamburger-line" aria-hidden="true"></span>
-        <span class="hamburger-line" aria-hidden="true"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
       </button>
     </div>
   </nav>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const navLinks = [
-  { id: 'projects', label: '專案' },
-  { id: 'skills', label: '技能' },
-  { id: 'experience', label: '經歷' },
-  { id: 'contact', label: '聯絡' }
+  { id: 'projects', label: 'Projects' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'contact', label: 'Contact' }
 ]
 
 const isScrolled = ref(false)
@@ -55,179 +51,137 @@ const isMenuOpen = ref(false)
 const currentSection = ref('')
 const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1024)
 
-// Check if mobile view
 const isMobile = computed(() => windowWidth.value <= 768)
 
-// 滾動到頂部
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
   isMenuOpen.value = false
 }
 
-// 處理導航點擊
-const handleNavClick = (sectionId) => {
-  const section = document.getElementById(sectionId)
-  if (section) {
-    section.scrollIntoView({ behavior: 'smooth' })
-    currentSection.value = sectionId
-  }
+const handleNavClick = (id) => {
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth' })
+  currentSection.value = id
   isMenuOpen.value = false
 }
 
-// 切換手機選單
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
-// 監聽滾動事件
 const handleScroll = () => {
-  // 更新滾動狀態
-  isScrolled.value = window.scrollY > 50
+  isScrolled.value = window.scrollY > 40
 }
 
-// 監聽視窗大小變化
 const handleResize = () => {
   windowWidth.value = window.innerWidth
-  // Close mobile menu when resizing to desktop
-  if (!isMobile.value) {
-    isMenuOpen.value = false
-  }
+  if (!isMobile.value) isMenuOpen.value = false
 }
 
-// 使用 IntersectionObserver 追蹤當前區塊（避免 forced reflow）
-let sectionObserver = null
-
-const setupSectionObserver = () => {
-  const sections = navLinks.map(link => document.getElementById(link.id)).filter(Boolean)
-  if (!sections.length) return
-
-  sectionObserver = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        currentSection.value = entry.target.id
-      }
-    }
-  }, { rootMargin: '-20% 0px -70% 0px' })
-
-  sections.forEach(section => sectionObserver.observe(section))
+const handleKeydown = (e) => {
+  if (e.key === 'Escape') isMenuOpen.value = false
 }
 
-// Handle escape key to close mobile menu
-const handleKeydown = (event) => {
-  if (event.key === 'Escape' && isMenuOpen.value) {
-    isMenuOpen.value = false
-  }
-}
+let observer = null
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
   window.addEventListener('resize', handleResize, { passive: true })
   window.addEventListener('keydown', handleKeydown)
-  handleScroll() // 初始化狀態
-  setupSectionObserver()
+  handleScroll()
+
+  const sections = navLinks.map(l => document.getElementById(l.id)).filter(Boolean)
+  observer = new IntersectionObserver(
+    entries => { for (const e of entries) if (e.isIntersecting) currentSection.value = e.target.id },
+    { rootMargin: '-20% 0px -70% 0px' }
+  )
+  sections.forEach(s => observer.observe(s))
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   window.removeEventListener('resize', handleResize)
   window.removeEventListener('keydown', handleKeydown)
-  if (sectionObserver) {
-    sectionObserver.disconnect()
-    sectionObserver = null
-  }
+  observer?.disconnect()
 })
 
-// 導出給測試使用
-defineExpose({
-  navLinks,
-  currentSection,
-  handleNavClick,
-  scrollToTop,
-  isMenuOpen,
-  isMobile
-})
+defineExpose({ navLinks, currentSection, handleNavClick, scrollToTop, isMenuOpen, isMobile })
 </script>
 
-
 <style scoped>
-/* ========================================
-   NavBar 導航列樣式
-   ======================================== */
-
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
-  background-color: transparent;
-  transition: all var(--transition-normal) var(--ease-out);
+  z-index: 100;
+  transition: background var(--transition-normal) var(--ease-out),
+              border-color var(--transition-normal) var(--ease-out),
+              box-shadow var(--transition-normal) var(--ease-out);
+  border-bottom: 1px solid transparent;
 }
 
 .navbar.scrolled {
-  background-color: rgba(13, 27, 42, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-md);
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom-color: var(--color-border);
+  backdrop-filter: blur(12px);
 }
 
-.nav-container {
+.nav-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   max-width: var(--max-width-content);
   margin: 0 auto;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: 1rem var(--spacing-xl);
 }
 
-/* 品牌標誌 */
 .nav-brand {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
-  text-decoration: none;
-  min-width: var(--min-touch-target);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  letter-spacing: -0.01em;
   min-height: var(--min-touch-target);
+  min-width: var(--min-touch-target);
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: color var(--transition-fast) var(--ease-out);
 }
 
 .nav-brand:hover {
-  color: var(--color-primary-light);
+  color: var(--color-text);
+  opacity: 0.7;
 }
 
-/* 導航連結 */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: 0.25rem;
 }
 
 .nav-link {
-  padding: var(--spacing-sm) var(--spacing-md);
-  min-height: var(--min-touch-target);
-  display: flex;
-  align-items: center;
-  font-size: var(--font-size-md);
+  padding: 0.375rem 0.75rem;
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
-  text-decoration: none;
   border-radius: var(--radius-md);
-  transition: all var(--transition-fast) var(--ease-out);
+  transition: color var(--transition-fast) var(--ease-out),
+              background var(--transition-fast) var(--ease-out);
+  min-height: var(--min-touch-target);
+  min-width: var(--min-touch-target);
+  display: flex;
+  align-items: center;
 }
 
 .nav-link:hover {
-  color: var(--color-text-primary);
-  background-color: rgba(100, 181, 246, 0.1);
+  color: var(--color-text);
+  background: rgba(0,0,0,0.04);
 }
 
 .nav-link.active {
-  color: var(--color-primary);
-  background-color: rgba(100, 181, 246, 0.15);
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
 }
 
-/* 漢堡選單按鈕 */
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -236,113 +190,57 @@ defineExpose({
   gap: 5px;
   width: var(--min-touch-target);
   height: var(--min-touch-target);
-  padding: var(--spacing-sm);
   background: transparent;
   border: none;
   cursor: pointer;
   border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast) var(--ease-out);
+  z-index: 101;
 }
 
-.nav-toggle:hover {
-  background-color: rgba(100, 181, 246, 0.1);
-}
-
-.hamburger-line {
-  width: 24px;
-  height: 2px;
-  background-color: var(--color-text-primary);
-  border-radius: var(--radius-full);
+.bar {
+  width: 22px;
+  height: 1.5px;
+  background: var(--color-text);
+  border-radius: 2px;
   transition: all var(--transition-fast) var(--ease-out);
+  display: block;
 }
 
-/* 漢堡選單動畫 */
-.navbar.menu-open .hamburger-line:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-
-.navbar.menu-open .hamburger-line:nth-child(2) {
-  opacity: 0;
-}
-
-.navbar.menu-open .hamburger-line:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
-
-/* ========================================
-   響應式設計
-   ======================================== */
+.navbar.menu-open .bar:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
+.navbar.menu-open .bar:nth-child(2) { opacity: 0; }
+.navbar.menu-open .bar:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
 
 @media (max-width: 768px) {
-  .nav-container {
-    padding: var(--spacing-sm) var(--spacing-md);
-  }
-  
-  .nav-toggle {
-    display: flex;
-    z-index: 1001;
-  }
-  
+  .nav-inner { padding: 0.75rem var(--spacing-md); }
+
+  .nav-toggle { display: flex; }
+
   .nav-links {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: var(--spacing-md);
-    background-color: rgba(13, 27, 42, 0.98);
-    backdrop-filter: blur(10px);
+    gap: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(12px);
     opacity: 0;
     visibility: hidden;
-    transition: all var(--transition-normal) var(--ease-out);
-    z-index: 1000;
+    transition: opacity var(--transition-normal) var(--ease-out),
+                visibility var(--transition-normal) var(--ease-out);
+    z-index: 100;
   }
-  
+
   .nav-links.open {
     opacity: 1;
     visibility: visible;
   }
-  
+
   .nav-link {
     font-size: var(--font-size-xl);
-    padding: var(--spacing-md) var(--spacing-xl);
-    min-height: var(--min-touch-target);
-    min-width: 200px;
+    padding: var(--spacing-sm) var(--spacing-xl);
+    min-width: 180px;
     justify-content: center;
-  }
-  
-  /* 確保品牌標誌在手機版有足夠的點擊區域 */
-  .nav-brand {
-    z-index: 1001;
-  }
-}
-
-@media (max-width: 480px) {
-  .nav-container {
-    padding: var(--spacing-xs) var(--spacing-sm);
-  }
-  
-  .nav-link {
-    font-size: var(--font-size-lg);
-    padding: var(--spacing-md) var(--spacing-lg);
-  }
-}
-
-/* ========================================
-   減少動畫偏好
-   ======================================== */
-
-@media (prefers-reduced-motion: reduce) {
-  .navbar,
-  .nav-brand,
-  .nav-link,
-  .nav-toggle,
-  .hamburger-line,
-  .nav-links {
-    transition: none;
   }
 }
 </style>

@@ -18,7 +18,7 @@ const mockScrollTo = vi.fn()
 const mockScrollIntoView = vi.fn()
 
 // Navigation link IDs
-const navLinkIds = ['projects', 'skills', 'highlights', 'experience', 'contact']
+const navLinkIds = ['projects', 'skills', 'experience', 'contact']
 
 // Generate valid nav link ID
 const navLinkIdArb = fc.constantFrom(...navLinkIds)
