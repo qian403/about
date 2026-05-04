@@ -3,6 +3,8 @@
 User-agent: *
 Allow: /
 
+Disallow: /cv
+
 # Block stale/invalid routes from previous site versions
 Disallow: /tags/
 Disallow: /tag/

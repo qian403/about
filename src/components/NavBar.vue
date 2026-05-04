@@ -40,9 +40,9 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const navLinks = [
+  { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
   { id: 'skills', label: 'Skills' },
-  { id: 'experience', label: 'Experience' },
   { id: 'contact', label: 'Contact' }
 ]
 
@@ -105,7 +105,7 @@ onUnmounted(() => {
   observer?.disconnect()
 })
 
-defineExpose({ navLinks, currentSection, handleNavClick, scrollToTop, isMenuOpen, isMobile })
+defineExpose({ navLinks, currentSection, handleNavClick, scrollToTop, isMenuOpen })
 </script>
 
 <style scoped>
