@@ -26,7 +26,7 @@ describe('HomeView - Role Rotation Property Tests', () => {
    * For any 身份列表，輪播功能應依序顯示每個身份，且在顯示完最後一個身份後應回到第一個身份繼續循環。
    */
   
-  const expectedRoles = ['Backend Developer', 'Security Enthusiast', 'Community Leader']
+  const expectedRoles = ['Backend Developer', 'Security Enthusiast']
   let wrapper
 
   beforeEach(() => {

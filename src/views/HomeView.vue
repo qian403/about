@@ -8,16 +8,8 @@
     <header class="hero" role="banner">
       <div class="hero-layout">
         <div class="hero-avatar-col">
-          <img
-            ref="avatarRef"
-            class="hero-avatar"
-            src="/avatar.jpg"
-            alt="HSU CHIA CHIEN"
-            width="400"
-            height="400"
-            :style="{ transform: `rotate(${avatarRotation}deg)` }"
-            @load="updateAvatarExitY"
-          />
+          <img ref="avatarRef" class="hero-avatar" src="/avatar.jpg" alt="HSU CHIA CHIEN" width="400" height="400"
+            :style="{ transform: `rotate(${avatarRotation}deg)` }" @load="updateAvatarExitY" />
         </div>
         <div class="hero-text-col">
           <p class="hero-sub">Hi, I'm</p>
@@ -45,14 +37,9 @@
           <h2 id="experience-title" class="section-title">經歷軌跡</h2>
         </div>
         <div class="exp-tabs" ref="tabsRef">
-          <button
-            v-for="tab in expTabs"
-            :key="tab.value"
-            :ref="el => { if (el) tabBtnRefs[tab.value] = el }"
-            :class="['exp-tab', { active: currentTab === tab.value }]"
-            @click="selectTab(tab.value)"
-            type="button"
-          >{{ tab.label }}</button>
+          <button v-for="tab in expTabs" :key="tab.value" :ref="el => { if (el) tabBtnRefs[tab.value] = el }"
+            :class="['exp-tab', { active: currentTab === tab.value }]" @click="selectTab(tab.value)" type="button">{{
+              tab.label }}</button>
           <div class="tab-indicator" :style="indicatorStyle" aria-hidden="true"></div>
         </div>
         <Transition name="tab-slide" mode="out-in">
@@ -178,7 +165,7 @@ import NavBar from '../components/NavBar.vue'
 
 // ── Static data (plain const — never reassigned, no reactivity needed) ─────
 
-const roles = ['Backend Developer', 'Security Enthusiast', 'Community Leader']
+const roles = ['Backend Developer', 'Security Enthusiast']
 
 const projects = [
   {
@@ -206,37 +193,37 @@ const projects = [
 ]
 
 const skillCategories = [
-  { label: 'Languages',       items: ['Golang', 'Python', 'JavaScript'] },
-  { label: 'Backend',         items: ['Django', 'FastAPI', 'Linux', 'Docker'] },
-  { label: 'Security',        items: ['Web Security', 'Penetration Testing', 'Vulnerability Research'] },
+  { label: 'Languages', items: ['Golang', 'Python', 'JavaScript'] },
+  { label: 'Backend', items: ['Django', 'FastAPI', 'Linux', 'Docker'] },
+  { label: 'Security', items: ['Web Security', 'Penetration Testing', 'Vulnerability Research'] },
   { label: 'Network & Other', items: ['BGP / ASN', 'Vue.js', 'CSS'] }
 ]
 
 const expTabs = [
-  { value: 'work',      label: 'Work' },
+  { value: 'work', label: 'Work' },
   { value: 'education', label: 'Education' },
   { value: 'community', label: 'Community' }
 ]
 
 const experienceData = [
-  { id: 'w1', type: 'work',      title: '實習工程師',    company: '瀚霖智動銷售科技有限公司',         period: '2024年11月 - 現在' },
-  { id: 'w2', type: 'work',      title: '前端工程師',    company: '網化數位有限公司',                 period: '2023年7月 - 2023年9月' },
-  { id: 'e1', type: 'education', title: '資訊工程系',    company: '國立宜蘭大學',                     period: '2024年 - 現在' },
-  { id: 'e2', type: 'education', title: '資訊科',        company: '國立羅東高級工業職業學校',         period: '2021年 - 2024年' },
-  { id: 'c1', type: 'community', title: '總召',          company: 'SITCON 學生計算機年會 2026',        period: '2025年 - 2026年' },
-  { id: 'c2', type: 'community', title: '副召',          company: 'SITCON Camp 2025',                 period: '2025年' },
-  { id: 'c3', type: 'community', title: '行政組副組長',  company: 'SITCON 學生計算機年會 2025',        period: '2024年 - 2025年' },
-  { id: 'c4', type: 'community', title: '場務組志工',    company: 'SITCON 學生計算機年會 2024',        period: '2024年' },
-  { id: 'c5', type: 'community', title: '學員',          company: 'AWS STEM Summer Camp on The Cloud 2023', period: '2023年' },
-  { id: 'c6', type: 'community', title: '學員',          company: '教育部先進資通安全實務人才培育計畫', period: '2023年' },
-  { id: 'c7', type: 'community', title: '學員',          company: 'AIS3 Junior 2022',                  period: '2022年' }
+  { id: 'w1', type: 'work', title: '實習工程師', company: '瀚霖智動銷售科技有限公司', period: '2024年11月 - 現在' },
+  { id: 'w2', type: 'work', title: '前端工程師', company: '網化數位有限公司', period: '2023年7月 - 2023年9月' },
+  { id: 'e1', type: 'education', title: '資訊工程系', company: '國立宜蘭大學', period: '2024年 - 現在' },
+  { id: 'e2', type: 'education', title: '資訊科', company: '國立羅東高級工業職業學校', period: '2021年 - 2024年' },
+  { id: 'c1', type: 'community', title: '總召', company: 'SITCON 學生計算機年會 2026', period: '2025年 - 2026年' },
+  { id: 'c2', type: 'community', title: '副召', company: 'SITCON Camp 2025', period: '2025年' },
+  { id: 'c3', type: 'community', title: '行政組副組長', company: 'SITCON 學生計算機年會 2025', period: '2024年 - 2025年' },
+  { id: 'c4', type: 'community', title: '場務組志工', company: 'SITCON 學生計算機年會 2024', period: '2024年' },
+  { id: 'c5', type: 'community', title: '學員', company: 'AWS STEM Summer Camp on The Cloud 2023', period: '2023年' },
+  { id: 'c6', type: 'community', title: '學員', company: '教育部先進資通安全實務人才培育計畫', period: '2023年' },
+  { id: 'c7', type: 'community', title: '學員', company: 'AIS3 Junior 2022', period: '2022年' }
 ]
 
 const contacts = [
-  { type: 'email',    label: 'Email',    value: 'hi@chien.dev',                  href: 'mailto:hi@chien.dev',                          external: false },
-  { type: 'github',   label: 'GitHub',   value: 'github.com/qian403',            href: 'https://github.com/qian403',                   external: true },
-  { type: 'blog',     label: 'Blog',     value: 'blog.chien.dev',                href: 'https://blog.chien.dev',                       external: true },
-  { type: 'linkedin', label: 'LinkedIn', value: 'linkedin.com/in/hsuchiachien', href: 'https://www.linkedin.com/in/hsuchiachien',      external: true }
+  { type: 'email', label: 'Email', value: 'hi@chien.dev', href: 'mailto:hi@chien.dev', external: false },
+  { type: 'github', label: 'GitHub', value: 'github.com/qian403', href: 'https://github.com/qian403', external: true },
+  { type: 'blog', label: 'Blog', value: 'blog.chien.dev', href: 'https://blog.chien.dev', external: true },
+  { type: 'linkedin', label: 'LinkedIn', value: 'linkedin.com/in/hsuchiachien', href: 'https://www.linkedin.com/in/hsuchiachien', external: true }
 ]
 
 // ── Reactive state ──────────────────────────────────────────────────────────
@@ -426,8 +413,15 @@ onUnmounted(() => {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-avatar { transform: none !important; will-change: auto; }
-  .hero-role::after { animation: none; opacity: 1; }
+  .hero-avatar {
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .hero-role::after {
+    animation: none;
+    opacity: 1;
+  }
 }
 
 .hero-text-col {
@@ -540,6 +534,7 @@ onUnmounted(() => {
 /* ── Sections ───────────────────────────────── */
 .section {
   padding: var(--spacing-3xl) 0;
+  contain: layout style;
 }
 
 .section-alt {
@@ -671,10 +666,10 @@ onUnmounted(() => {
 
 .skill-group-label {
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-bold);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -758,18 +753,18 @@ onUnmounted(() => {
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   min-width: 80px;
 }
 
 .contact-value {
   font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+  color: var(--color-text);
   flex: 1;
 }
 
 .contact-arrow {
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   transition: transform var(--transition-fast);
 }
@@ -987,6 +982,21 @@ onUnmounted(() => {
 
   .scroll-hint {
     display: none;
+  }
+}
+
+/* touch devices: neutralize hover-triggered transforms during scroll */
+@media (hover: none) and (pointer: coarse) {
+  .project-row:hover {
+    padding-left: 0;
+  }
+
+  .contact-item:hover {
+    padding-left: 0;
+  }
+
+  .contact-item:hover .contact-arrow {
+    transform: none;
   }
 }
 </style>

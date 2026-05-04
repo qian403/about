@@ -122,9 +122,15 @@ defineExpose({ navLinks, currentSection, handleNavClick, scrollToTop, isMenuOpen
 }
 
 .navbar.scrolled {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.96);
   border-bottom-color: var(--color-border);
-  backdrop-filter: blur(12px);
+}
+
+@media (hover: hover) {
+  .navbar.scrolled {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(12px);
+  }
 }
 
 .nav-inner {
@@ -222,8 +228,7 @@ defineExpose({ navLinks, currentSection, handleNavClick, scrollToTop, isMenuOpen
     justify-content: center;
     align-items: center;
     gap: var(--spacing-sm);
-    background: rgba(255, 255, 255, 0.97);
-    backdrop-filter: blur(12px);
+    background: #ffffff;
     opacity: 0;
     visibility: hidden;
     transition: opacity var(--transition-normal) var(--ease-out),
