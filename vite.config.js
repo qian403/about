@@ -2,11 +2,14 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vuetify from 'vite-plugin-vuetify'
 import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const sassOptions = {
   api: 'modern-compiler',
   quietDeps: true,
-  silenceDeprecations: ['if-function']
+  silenceDeprecations: ['if-function'],
 }
 
 export default defineConfig({
@@ -14,40 +17,40 @@ export default defineConfig({
     vue({
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.startsWith('md-')
-        }
-      }
+          isCustomElement: tag => tag.startsWith('md-'),
+        },
+      },
     }),
-    vuetify({ 
+    vuetify({
       autoImport: true,
-      styles: { configFile: 'src/assets/vuetify-settings.scss' }
-    })
+      styles: { configFile: 'src/assets/vuetify-settings.scss' },
+    }),
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
-    }
+      '@': path.resolve(__dirname, './src'),
+    },
   },
   css: {
     preprocessorOptions: {
       sass: sassOptions,
-      scss: sassOptions
-    }
+      scss: sassOptions,
+    },
   },
   build: {
     rollupOptions: {
       output: {
         manualChunks: {
-          'vuetify': ['vuetify'],
-          'vue-vendor': ['vue', 'vue-router']
-        }
-      }
+          vuetify: ['vuetify'],
+          'vue-vendor': ['vue', 'vue-router'],
+        },
+      },
     },
-    cssCodeSplit: true
+    cssCodeSplit: true,
   },
   server: {
     host: true,
     port: 3000,
-    open: true
-  }
+    open: true,
+  },
 })

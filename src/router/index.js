@@ -5,23 +5,18 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/cv',
-    name: 'cv',
-    component: () => import('../views/CVView.vue')
+    component: HomeView,
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
-    component: () => import('../views/NotFoundView.vue')
-  }
+    component: () => import('../views/NotFoundView.vue'),
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 })
 
-export default router 
+export default router

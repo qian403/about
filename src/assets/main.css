@@ -34,9 +34,9 @@
   --radius-lg: 10px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.1);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
 
   --font-size-xs: 0.72rem;
   --font-size-sm: 0.875rem;
@@ -66,15 +66,21 @@
   --color-bg-alt: rgba(0, 0, 0, 0.018);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -97,7 +103,14 @@ html {
 }
 
 body {
-  font-family: 'Inter', 'Inter fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    'Inter',
+    'Inter fallback',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: var(--line-height-normal);
@@ -123,14 +136,29 @@ body {
   pointer-events: none;
 }
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.3); }
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
 
-::selection { background: rgba(37, 99, 235, 0.15); color: var(--color-text); }
+::selection {
+  background: rgba(37, 99, 235, 0.15);
+  color: var(--color-text);
+}
 
-:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
 
 a {
   color: var(--color-accent);
@@ -138,7 +166,9 @@ a {
   transition: color var(--transition-fast) var(--ease-out);
 }
 
-a:hover { color: var(--color-accent-hover); }
+a:hover {
+  color: var(--color-accent-hover);
+}
 
 .container {
   width: 100%;
@@ -148,7 +178,9 @@ a:hover { color: var(--color-accent-hover); }
 }
 
 @media (max-width: 768px) {
-  .container { padding: 0 var(--spacing-md); }
+  .container {
+    padding: 0 var(--spacing-md);
+  }
 }
 
 .btn {
@@ -196,11 +228,12 @@ a:hover { color: var(--color-accent-hover); }
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-text);
-  background: rgba(255,255,255,0.6);
+  background: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.01em;
 }
 
-md-icon, .material-icons {
+md-icon,
+.material-icons {
   font-family: 'Material Icons';
   font-size: 18px;
   width: 18px;

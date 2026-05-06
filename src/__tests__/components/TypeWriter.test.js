@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import TypeWriter from './TypeWriter.vue'
+import TypeWriter from '../../components/TypeWriter.vue'
 
 describe('TypeWriter', () => {
   beforeEach(() => {
@@ -14,8 +14,8 @@ describe('TypeWriter', () => {
   it('renders typewriter component with cursor', () => {
     const wrapper = mount(TypeWriter, {
       props: {
-        texts: ['Hello', 'World']
-      }
+        texts: ['Hello', 'World'],
+      },
     })
     expect(wrapper.find('.typewriter').exists()).toBe(true)
     expect(wrapper.find('.typewriter-cursor').exists()).toBe(true)
@@ -26,8 +26,8 @@ describe('TypeWriter', () => {
     const wrapper = mount(TypeWriter, {
       props: {
         texts: ['Hi'],
-        speed: 100
-      }
+        speed: 100,
+      },
     })
 
     // 第一個字元在 mount 時同步執行
@@ -44,13 +44,13 @@ describe('TypeWriter', () => {
         texts: ['A'],
         speed: 100,
         deleteSpeed: 50,
-        pause: 500
-      }
+        pause: 500,
+      },
     })
 
     // mount 時打 'A'
     expect(wrapper.vm.displayText).toBe('A')
-    
+
     // 驗證組件有 deleteSpeed prop
     expect(wrapper.props('deleteSpeed')).toBe(50)
     expect(wrapper.props('pause')).toBe(500)
@@ -60,8 +60,8 @@ describe('TypeWriter', () => {
     const wrapper = mount(TypeWriter, {
       props: {
         texts: ['Test'],
-        speed: 200
-      }
+        speed: 200,
+      },
     })
 
     // mount 時同步打第一個字
@@ -74,16 +74,16 @@ describe('TypeWriter', () => {
 
   it('cleans up timeout on unmount', async () => {
     const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout')
-    
+
     const wrapper = mount(TypeWriter, {
       props: {
-        texts: ['Hello']
-      }
+        texts: ['Hello'],
+      },
     })
 
     vi.advanceTimersByTime(100)
     wrapper.unmount()
-    
+
     expect(clearTimeoutSpy).toHaveBeenCalled()
   })
 })

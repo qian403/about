@@ -2,10 +2,10 @@
  * Property-Based Tests for Interactive Element Minimum Sizes
  * Feature: portfolio-redesign, Property 8: 互動元素最小尺寸
  * Validates: Requirements 8.2
- * 
+ *
  * For any 可點擊的互動元素（按鈕、連結），其最小寬度和高度應至少為 44px，
  * 以符合觸控裝置的可用性標準。
- * 
+ *
  * Note: Since JSDOM doesn't compute CSS from stylesheets, these tests verify:
  * 1. The correct CSS classes are applied to interactive elements
  * 2. The CSS variable --min-touch-target is defined as 44px
@@ -14,20 +14,20 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import * as fc from 'fast-check'
-import NavBar from './NavBar.vue'
-import ProjectCard from './ProjectCard.vue'
-import FilterableTimeline from './FilterableTimeline.vue'
+import NavBar from '../../components/NavBar.vue'
+import ProjectCard from '../../components/ProjectCard.vue'
+import FilterableTimeline from '../../components/FilterableTimeline.vue'
 
 // Mock md-icon component
 const mockMdIcon = {
-  template: '<span class="md-icon"><slot /></span>'
+  template: '<span class="md-icon"><slot /></span>',
 }
 
 // Minimum touch target size (44px)
-const MIN_TOUCH_TARGET = 44
+const _MIN_TOUCH_TARGET = 44
 
 // CSS variable name for touch target
-const TOUCH_TARGET_VAR = '--min-touch-target'
+const _TOUCH_TARGET_VAR = '--min-touch-target'
 
 describe('Property 8: 互動元素最小尺寸', () => {
   /**
@@ -42,7 +42,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
       const path = await import('path')
       const cssPath = path.resolve(__dirname, '../assets/main.css')
       const cssContent = fs.readFileSync(cssPath, 'utf-8')
-      
+
       // Check that --min-touch-target: 44px is defined
       expect(cssContent).toContain('--min-touch-target: 44px')
     })
@@ -62,7 +62,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
         section.scrollIntoView = () => {}
         Object.defineProperty(section, 'offsetTop', {
           value: (index + 1) * 500,
-          writable: true
+          writable: true,
         })
         document.body.appendChild(section)
         mockSections[id] = section
@@ -71,10 +71,10 @@ describe('Property 8: 互動元素最小尺寸', () => {
       wrapper = mount(NavBar, {
         global: {
           stubs: {
-            'md-icon': mockMdIcon
-          }
+            'md-icon': mockMdIcon,
+          },
         },
-        attachTo: document.body
+        attachTo: document.body,
       })
     })
 
@@ -106,15 +106,15 @@ describe('Property 8: 互動元素最小尺寸', () => {
       const path = await import('path')
       const componentPath = path.resolve(__dirname, './NavBar.vue')
       const componentContent = fs.readFileSync(componentPath, 'utf-8')
-      
+
       // Verify CSS uses --min-touch-target for nav-brand
       expect(componentContent).toContain('.nav-brand')
       expect(componentContent).toContain('min-width: var(--min-touch-target)')
       expect(componentContent).toContain('min-height: var(--min-touch-target)')
-      
+
       // Verify CSS uses --min-touch-target for nav-link
       expect(componentContent).toContain('.nav-link')
-      
+
       // Verify CSS uses --min-touch-target for nav-toggle
       expect(componentContent).toContain('.nav-toggle')
       expect(componentContent).toContain('width: var(--min-touch-target)')
@@ -123,15 +123,12 @@ describe('Property 8: 互動元素最小尺寸', () => {
 
     it('Property 8: For any nav link index, the element has nav-link class', () => {
       const navLinks = wrapper.findAll('.nav-link')
-      
+
       fc.assert(
-        fc.property(
-          fc.integer({ min: 0, max: navLinks.length - 1 }),
-          (index) => {
-            const link = navLinks[index]
-            return link.classes().includes('nav-link')
-          }
-        ),
+        fc.property(fc.integer({ min: 0, max: navLinks.length - 1 }), index => {
+          const link = navLinks[index]
+          return link.classes().includes('nav-link')
+        }),
         { numRuns: 100 }
       )
     })
@@ -145,20 +142,20 @@ describe('Property 8: 互動元素最小尺寸', () => {
       description: 'A test project description',
       tags: ['Vue', 'JavaScript'],
       github: 'https://github.com/test',
-      demo: 'https://demo.test.com'
+      demo: 'https://demo.test.com',
     }
 
     beforeEach(() => {
       wrapper = mount(ProjectCard, {
         props: {
-          project: sampleProject
+          project: sampleProject,
         },
         global: {
           stubs: {
-            'md-icon': mockMdIcon
-          }
+            'md-icon': mockMdIcon,
+          },
         },
-        attachTo: document.body
+        attachTo: document.body,
       })
     })
 
@@ -185,30 +182,34 @@ describe('Property 8: 互動元素最小尺寸', () => {
       const projectArb = fc.record({
         name: fc.string({ minLength: 1, maxLength: 50 }),
         description: fc.string({ minLength: 1, maxLength: 200 }),
-        tags: fc.array(fc.string({ minLength: 1, maxLength: 20 }), { minLength: 1, maxLength: 5 }),
-        github: fc.option(fc.constant('https://github.com/test'), { nil: null }),
-        demo: fc.option(fc.constant('https://demo.test.com'), { nil: null })
+        tags: fc.array(fc.string({ minLength: 1, maxLength: 20 }), {
+          minLength: 1,
+          maxLength: 5,
+        }),
+        github: fc.option(fc.constant('https://github.com/test'), {
+          nil: null,
+        }),
+        demo: fc.option(fc.constant('https://demo.test.com'), { nil: null }),
       })
 
       fc.assert(
-        fc.property(
-          projectArb,
-          (project) => {
-            if (!project.github && !project.demo) return true
+        fc.property(projectArb, project => {
+          if (!project.github && !project.demo) return true
 
-            const testWrapper = mount(ProjectCard, {
-              props: { project },
-              global: { stubs: { 'md-icon': mockMdIcon } },
-              attachTo: document.body
-            })
+          const testWrapper = mount(ProjectCard, {
+            props: { project },
+            global: { stubs: { 'md-icon': mockMdIcon } },
+            attachTo: document.body,
+          })
 
-            const links = testWrapper.findAll('.project-link')
-            const allHaveClass = links.every((link) => link.classes().includes('project-link'))
+          const links = testWrapper.findAll('.project-link')
+          const allHaveClass = links.every(link =>
+            link.classes().includes('project-link')
+          )
 
-            testWrapper.unmount()
-            return allHaveClass
-          }
-        ),
+          testWrapper.unmount()
+          return allHaveClass
+        }),
         { numRuns: 50 }
       )
     })
@@ -225,7 +226,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
         subtitle: 'Test Company',
         period: '2024',
         description: 'Test description',
-        expanded: false
+        expanded: false,
       },
       {
         id: 'edu-1',
@@ -234,21 +235,21 @@ describe('Property 8: 互動元素最小尺寸', () => {
         subtitle: 'Test University',
         period: '2023',
         description: 'Test education',
-        expanded: false
-      }
+        expanded: false,
+      },
     ]
 
     beforeEach(() => {
       wrapper = mount(FilterableTimeline, {
         props: {
-          items: sampleItems
+          items: sampleItems,
         },
         global: {
           stubs: {
-            'md-icon': mockMdIcon
-          }
+            'md-icon': mockMdIcon,
+          },
         },
-        attachTo: document.body
+        attachTo: document.body,
       })
     })
 
@@ -271,7 +272,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
       const path = await import('path')
       const componentPath = path.resolve(__dirname, './FilterableTimeline.vue')
       const componentContent = fs.readFileSync(componentPath, 'utf-8')
-      
+
       // Verify CSS defines min-height and min-width for filter-btn
       expect(componentContent).toContain('.filter-btn')
       expect(componentContent).toContain('min-height: 44px')
@@ -283,7 +284,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
       const path = await import('path')
       const componentPath = path.resolve(__dirname, './FilterableTimeline.vue')
       const componentContent = fs.readFileSync(componentPath, 'utf-8')
-      
+
       // Verify CSS defines min-height and min-width for expand-btn
       expect(componentContent).toContain('.expand-btn')
       expect(componentContent).toContain('min-width: 44px')
@@ -292,11 +293,11 @@ describe('Property 8: 互動元素最小尺寸', () => {
 
     it('Property 8: For any filter option index, the button has filter-btn class', () => {
       const filterBtns = wrapper.findAll('.filter-btn')
-      
+
       fc.assert(
         fc.property(
           fc.integer({ min: 0, max: filterBtns.length - 1 }),
-          (index) => {
+          index => {
             const btn = filterBtns[index]
             return btn.classes().includes('filter-btn')
           }
@@ -314,30 +315,32 @@ describe('Property 8: 互動元素最小尺寸', () => {
         subtitle: fc.string({ minLength: 1, maxLength: 50 }),
         period: fc.string({ minLength: 1, maxLength: 20 }),
         description: fc.string({ minLength: 1, maxLength: 200 }),
-        expanded: fc.boolean()
+        expanded: fc.boolean(),
       })
 
       fc.assert(
         fc.property(
           fc.array(timelineItemArb, { minLength: 1, maxLength: 5 }),
-          (items) => {
+          items => {
             // Ensure unique IDs
             const uniqueItems = items.map((item, index) => ({
               ...item,
-              id: `${item.type}-${index}`
+              id: `${item.type}-${index}`,
             }))
-            
+
             const testWrapper = mount(FilterableTimeline, {
               props: { items: uniqueItems },
               global: {
-                stubs: { 'md-icon': mockMdIcon }
+                stubs: { 'md-icon': mockMdIcon },
               },
-              attachTo: document.body
+              attachTo: document.body,
             })
-            
+
             const expandBtns = testWrapper.findAll('.expand-btn')
-            const allHaveClass = expandBtns.every((btn) => btn.classes().includes('expand-btn'))
-            
+            const allHaveClass = expandBtns.every(btn =>
+              btn.classes().includes('expand-btn')
+            )
+
             testWrapper.unmount()
             return allHaveClass
           }

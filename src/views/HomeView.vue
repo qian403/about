@@ -1,6 +1,11 @@
 <template>
   <main class="home" role="main">
-    <a href="#projects" class="skip-link" @click.prevent="scrollToSection('projects')">跳至主要內容</a>
+    <a
+      href="#projects"
+      class="skip-link"
+      @click.prevent="scrollToSection('projects')"
+      >跳至主要內容</a
+    >
 
     <NavBar />
 
@@ -8,8 +13,16 @@
     <header class="hero" role="banner">
       <div class="hero-layout">
         <div class="hero-avatar-col">
-          <img ref="avatarRef" class="hero-avatar" src="/avatar.jpg" alt="HSU CHIA CHIEN" width="400" height="400"
-            :style="{ transform: `rotate(${avatarRotation}deg)` }" @load="updateAvatarExitY" />
+          <img
+            ref="avatarRef"
+            class="hero-avatar"
+            src="/avatar.jpg"
+            alt="HSU CHIA CHIEN"
+            width="400"
+            height="400"
+            :style="{ transform: `rotate(${avatarRotation}deg)` }"
+            @load="updateAvatarExitY"
+          />
         </div>
         <div class="hero-text-col">
           <p class="hero-sub">Hi, I'm</p>
@@ -17,14 +30,26 @@
           <p class="hero-role">{{ currentRole }}</p>
           <p class="hero-tagline">用程式碼解決問題，用社群連結人們</p>
           <div class="hero-actions">
-            <button class="btn" @click="scrollToSection('contact')">聯絡我</button>
-            <a class="btn btn-primary" href="https://blog.chien.dev" target="_blank" rel="noopener noreferrer">Blog
-              →</a>
+            <button class="btn" @click="scrollToSection('contact')">
+              聯絡我
+            </button>
+            <a
+              class="btn btn-primary"
+              href="https://blog.chien.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Blog →</a
+            >
           </div>
         </div>
       </div>
 
-      <button class="scroll-hint" @click="scrollToSection('projects')" type="button" aria-label="向下滾動">
+      <button
+        class="scroll-hint"
+        type="button"
+        aria-label="向下滾動"
+        @click="scrollToSection('projects')"
+      >
         <span class="scroll-arrow"></span>
       </button>
     </header>
@@ -36,15 +61,34 @@
           <span class="section-label">EXPERIENCE</span>
           <h2 id="experience-title" class="section-title">經歷軌跡</h2>
         </div>
-        <div class="exp-tabs" ref="tabsRef">
-          <button v-for="tab in expTabs" :key="tab.value" :ref="el => { if (el) tabBtnRefs[tab.value] = el }"
-            :class="['exp-tab', { active: currentTab === tab.value }]" @click="selectTab(tab.value)" type="button">{{
-              tab.label }}</button>
-          <div class="tab-indicator" :style="indicatorStyle" aria-hidden="true"></div>
+        <div ref="tabsRef" class="exp-tabs">
+          <button
+            v-for="tab in expTabs"
+            :key="tab.value"
+            :ref="
+              el => {
+                if (el) tabBtnRefs[tab.value] = el
+              }
+            "
+            :class="['exp-tab', { active: currentTab === tab.value }]"
+            type="button"
+            @click="selectTab(tab.value)"
+          >
+            {{ tab.label }}
+          </button>
+          <div
+            class="tab-indicator"
+            :style="indicatorStyle"
+            aria-hidden="true"
+          ></div>
         </div>
         <Transition name="tab-slide" mode="out-in">
-          <div class="timeline" :key="currentTab" aria-live="polite">
-            <div v-for="item in filteredExp" :key="item.id" class="timeline-item">
+          <div :key="currentTab" class="timeline" aria-live="polite">
+            <div
+              v-for="item in filteredExp"
+              :key="item.id"
+              class="timeline-item"
+            >
               <div class="timeline-track">
                 <div class="timeline-dot"></div>
                 <div class="timeline-line"></div>
@@ -52,7 +96,9 @@
               <div class="timeline-body">
                 <div class="timeline-meta">
                   <span class="timeline-period">{{ item.period }}</span>
-                  <span v-if="item.duration" class="timeline-dur">· {{ item.duration }}</span>
+                  <span v-if="item.duration" class="timeline-dur"
+                    >· {{ item.duration }}</span
+                  >
                 </div>
                 <p class="timeline-title">{{ item.title }}</p>
                 <p class="timeline-org">{{ item.company }}</p>
@@ -64,7 +110,11 @@
     </section>
 
     <!-- Projects -->
-    <section id="projects" class="section section-alt" aria-labelledby="projects-title">
+    <section
+      id="projects"
+      class="section section-alt"
+      aria-labelledby="projects-title"
+    >
       <div class="container">
         <div class="section-head">
           <span class="section-label">PROJECTS</span>
@@ -72,7 +122,9 @@
         </div>
         <div class="projects-list">
           <div v-for="(p, i) in projects" :key="p.name" class="project-row">
-            <span class="project-num">{{ String(i + 1).padStart(2, '0') }}</span>
+            <span class="project-num">{{
+              String(i + 1).padStart(2, '0')
+            }}</span>
 
             <div class="project-info">
               <h3 class="project-name">{{ p.name }}</h3>
@@ -80,20 +132,41 @@
             </div>
 
             <div class="project-tags">
-              <span v-for="tag in p.tags" :key="tag" class="tag">{{ tag }}</span>
+              <span v-for="tag in p.tags" :key="tag" class="tag">{{
+                tag
+              }}</span>
             </div>
 
             <div class="project-actions">
-              <a v-if="p.github" :href="p.github" target="_blank" rel="noopener noreferrer" class="project-action-link"
-                :aria-label="`${p.name} GitHub`">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <a
+                v-if="p.github"
+                :href="p.github"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-action-link"
+                :aria-label="`${p.name} GitHub`"
+              >
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
                   <path
-                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                  />
                 </svg>
                 GitHub
               </a>
-              <a v-if="p.demo" :href="p.demo" target="_blank" rel="noopener noreferrer"
-                class="project-action-link project-action-primary" :aria-label="`${p.name} ${p.demoLabel || 'Demo'}`">
+              <a
+                v-if="p.demo"
+                :href="p.demo"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-action-link project-action-primary"
+                :aria-label="`${p.name} ${p.demoLabel || 'Demo'}`"
+              >
                 {{ p.demoLabel || 'Demo' }} →
               </a>
             </div>
@@ -102,20 +175,33 @@
 
         <p class="projects-more">
           更多 →
-          <a href="https://github.com/qian403" target="_blank" rel="noopener noreferrer">github.com/qian403</a>
+          <a
+            href="https://github.com/qian403"
+            target="_blank"
+            rel="noopener noreferrer"
+            >github.com/qian403</a
+          >
         </p>
       </div>
     </section>
 
     <!-- Skills -->
-    <section id="skills" class="section section-alt" aria-labelledby="skills-title">
+    <section
+      id="skills"
+      class="section section-alt"
+      aria-labelledby="skills-title"
+    >
       <div class="container">
         <div class="section-head">
           <span class="section-label">SKILLS</span>
           <h2 id="skills-title" class="section-title">技術能力</h2>
         </div>
         <div class="skills-grid">
-          <div v-for="cat in skillCategories" :key="cat.label" class="skill-group">
+          <div
+            v-for="cat in skillCategories"
+            :key="cat.label"
+            class="skill-group"
+          >
             <h3 class="skill-group-label">{{ cat.label }}</h3>
             <div class="skill-tags">
               <span v-for="s in cat.items" :key="s" class="tag">{{ s }}</span>
@@ -126,7 +212,11 @@
     </section>
 
     <!-- Contact -->
-    <section id="contact" class="section section-alt" aria-labelledby="contact-title">
+    <section
+      id="contact"
+      class="section section-alt"
+      aria-labelledby="contact-title"
+    >
       <div class="container">
         <div class="section-head">
           <span class="section-label">CONTACT</span>
@@ -134,9 +224,15 @@
         </div>
         <p class="contact-intro">有任何問題或合作機會，歡迎透過以下方式聯繫</p>
         <div class="contact-list">
-          <a v-for="c in contacts" :key="c.type" :href="c.href" :target="c.external ? '_blank' : undefined"
-            :rel="c.external ? 'noopener noreferrer' : undefined" class="contact-item"
-            :aria-label="`${c.label}: ${c.value}`">
+          <a
+            v-for="c in contacts"
+            :key="c.type"
+            :href="c.href"
+            :target="c.external ? '_blank' : undefined"
+            :rel="c.external ? 'noopener noreferrer' : undefined"
+            class="contact-item"
+            :aria-label="`${c.label}: ${c.value}`"
+          >
             <span class="contact-label">{{ c.label }}</span>
             <span class="contact-value">{{ c.value }}</span>
             <span class="contact-arrow" aria-hidden="true">→</span>
@@ -148,14 +244,29 @@
     <!-- Footer -->
     <footer class="site-footer">
       <div class="container">
-        <p>© 2026 HSU CHIA CHIEN &nbsp;·&nbsp; Built with Vue.js &nbsp;·&nbsp; <a
-            href="https://github.com/qian403/about" target="_blank" rel="noopener noreferrer">Source</a></p>
+        <p>
+          © 2026 HSU CHIA CHIEN &nbsp;·&nbsp; Built with Vue.js &nbsp;·&nbsp;
+          <a
+            href="https://github.com/qian403/about"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Source</a
+          >
+        </p>
       </div>
     </footer>
 
     <!-- Back to top -->
-    <button class="back-to-top" :class="{ visible: showBackToTop }" @click="scrollToTop" aria-label="回到頂部" type="button"
-      :tabindex="showBackToTop ? 0 : -1">↑</button>
+    <button
+      class="back-to-top"
+      :class="{ visible: showBackToTop }"
+      aria-label="回到頂部"
+      type="button"
+      :tabindex="showBackToTop ? 0 : -1"
+      @click="scrollToTop"
+    >
+      ↑
+    </button>
   </main>
 </template>
 
@@ -174,56 +285,149 @@ const projects = [
     tags: ['Vue.js', 'Tools'],
     github: 'https://github.com/qian403/web-tools',
     demo: 'https://tools.chien.dev',
-    demoLabel: '前往網站'
+    demoLabel: '前往網站',
   },
   {
     name: 'CatchTheDiff',
     description: '定時爬取各家新聞網站並記錄版本變更，追蹤新聞修改痕跡',
     tags: ['Python', 'Crawler', 'News'],
     github: 'https://github.com/qian403/CatchTheDiff',
-    demo: null
+    demo: null,
   },
   {
     name: 'FutureNest Chatbot',
     description: '具備 RAG 功能的 Chatbot，使用 Django + React.js 建構',
     tags: ['Django', 'React', 'RAG', 'Python'],
     github: 'https://github.com/qian403/futurenest-chatbot',
-    demo: null
-  }
+    demo: null,
+  },
 ]
 
 const skillCategories = [
   { label: 'Languages', items: ['Golang', 'Python', 'JavaScript'] },
   { label: 'Backend', items: ['Django', 'FastAPI', 'Linux', 'Docker'] },
-  { label: 'Security', items: ['Web Security', 'Penetration Testing', 'Vulnerability Research'] },
-  { label: 'Network & Other', items: ['BGP / ASN', 'Vue.js', 'CSS'] }
+  {
+    label: 'Security',
+    items: ['Web Security', 'Penetration Testing', 'Vulnerability Research'],
+  },
+  { label: 'Network & Other', items: ['BGP / ASN', 'Vue.js', 'CSS'] },
 ]
 
 const expTabs = [
   { value: 'work', label: 'Work' },
   { value: 'education', label: 'Education' },
-  { value: 'community', label: 'Community' }
+  { value: 'community', label: 'Community' },
 ]
 
 const experienceData = [
-  { id: 'w1', type: 'work', title: '實習工程師', company: '瀚霖智動銷售科技有限公司', period: '2024年11月 - 現在' },
-  { id: 'w2', type: 'work', title: '前端工程師', company: '網化數位有限公司', period: '2023年7月 - 2023年9月' },
-  { id: 'e1', type: 'education', title: '資訊工程系', company: '國立宜蘭大學', period: '2024年 - 現在' },
-  { id: 'e2', type: 'education', title: '資訊科', company: '國立羅東高級工業職業學校', period: '2021年 - 2024年' },
-  { id: 'c1', type: 'community', title: '總召', company: 'SITCON 學生計算機年會 2026', period: '2025年 - 2026年' },
-  { id: 'c2', type: 'community', title: '副召', company: 'SITCON Camp 2025', period: '2025年' },
-  { id: 'c3', type: 'community', title: '行政組副組長', company: 'SITCON 學生計算機年會 2025', period: '2024年 - 2025年' },
-  { id: 'c4', type: 'community', title: '場務組志工', company: 'SITCON 學生計算機年會 2024', period: '2024年' },
-  { id: 'c5', type: 'community', title: '學員', company: 'AWS STEM Summer Camp on The Cloud 2023', period: '2023年' },
-  { id: 'c6', type: 'community', title: '學員', company: '教育部先進資通安全實務人才培育計畫', period: '2023年' },
-  { id: 'c7', type: 'community', title: '學員', company: 'AIS3 Junior 2022', period: '2022年' }
+  {
+    id: 'w1',
+    type: 'work',
+    title: '實習工程師',
+    company: '瀚霖智動銷售科技有限公司',
+    period: '2024年11月 - 現在',
+  },
+  {
+    id: 'w2',
+    type: 'work',
+    title: '前端工程師',
+    company: '網化數位有限公司',
+    period: '2023年7月 - 2023年9月',
+  },
+  {
+    id: 'e1',
+    type: 'education',
+    title: '資訊工程系',
+    company: '國立宜蘭大學',
+    period: '2024年 - 現在',
+  },
+  {
+    id: 'e2',
+    type: 'education',
+    title: '資訊科',
+    company: '國立羅東高級工業職業學校',
+    period: '2021年 - 2024年',
+  },
+  {
+    id: 'c1',
+    type: 'community',
+    title: '總召',
+    company: 'SITCON 學生計算機年會 2026',
+    period: '2025年 - 2026年',
+  },
+  {
+    id: 'c2',
+    type: 'community',
+    title: '副召',
+    company: 'SITCON Camp 2025',
+    period: '2025年',
+  },
+  {
+    id: 'c3',
+    type: 'community',
+    title: '行政組副組長',
+    company: 'SITCON 學生計算機年會 2025',
+    period: '2024年 - 2025年',
+  },
+  {
+    id: 'c4',
+    type: 'community',
+    title: '場務組志工',
+    company: 'SITCON 學生計算機年會 2024',
+    period: '2024年',
+  },
+  {
+    id: 'c5',
+    type: 'community',
+    title: '學員',
+    company: 'AWS STEM Summer Camp on The Cloud 2023',
+    period: '2023年',
+  },
+  {
+    id: 'c6',
+    type: 'community',
+    title: '學員',
+    company: '教育部先進資通安全實務人才培育計畫',
+    period: '2023年',
+  },
+  {
+    id: 'c7',
+    type: 'community',
+    title: '學員',
+    company: 'AIS3 Junior 2022',
+    period: '2022年',
+  },
 ]
 
 const contacts = [
-  { type: 'email', label: 'Email', value: 'hi@chien.dev', href: 'mailto:hi@chien.dev', external: false },
-  { type: 'github', label: 'GitHub', value: 'github.com/qian403', href: 'https://github.com/qian403', external: true },
-  { type: 'blog', label: 'Blog', value: 'blog.chien.dev', href: 'https://blog.chien.dev', external: true },
-  { type: 'linkedin', label: 'LinkedIn', value: 'linkedin.com/in/hsuchiachien', href: 'https://www.linkedin.com/in/hsuchiachien', external: true }
+  {
+    type: 'email',
+    label: 'Email',
+    value: 'hi@chien.dev',
+    href: 'mailto:hi@chien.dev',
+    external: false,
+  },
+  {
+    type: 'github',
+    label: 'GitHub',
+    value: 'github.com/qian403',
+    href: 'https://github.com/qian403',
+    external: true,
+  },
+  {
+    type: 'blog',
+    label: 'Blog',
+    value: 'blog.chien.dev',
+    href: 'https://blog.chien.dev',
+    external: true,
+  },
+  {
+    type: 'linkedin',
+    label: 'LinkedIn',
+    value: 'linkedin.com/in/hsuchiachien',
+    href: 'https://www.linkedin.com/in/hsuchiachien',
+    external: true,
+  },
 ]
 
 // ── Reactive state ──────────────────────────────────────────────────────────
@@ -239,7 +443,7 @@ const tabsRef = ref(null)
 const tabBtnRefs = {}
 const indicatorStyle = ref({ left: '0px', width: '0px' })
 
-const updateIndicator = (tabValue) => {
+const updateIndicator = tabValue => {
   const btn = tabBtnRefs[tabValue]
   const container = tabsRef.value
   if (!btn || !container) return
@@ -247,11 +451,11 @@ const updateIndicator = (tabValue) => {
   const br = btn.getBoundingClientRect()
   indicatorStyle.value = {
     left: `${br.left - cr.left}px`,
-    width: `${br.width}px`
+    width: `${br.width}px`,
   }
 }
 
-const selectTab = (value) => {
+const selectTab = value => {
   currentTab.value = value
   nextTick(() => updateIndicator(value))
 }
@@ -260,7 +464,9 @@ const selectTab = (value) => {
 
 let roleIndex = 0
 let roleTimer = null
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+const prefersReducedMotion = window.matchMedia(
+  '(prefers-reduced-motion: reduce)'
+)
 
 const resumeRoleCycling = () => {
   if (roleTimer) return
@@ -304,11 +510,12 @@ const handleScroll = () => {
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
-const scrollToSection = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+const scrollToSection = id =>
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 
 function calcDuration(period) {
   const now = new Date()
-  const parse = (s) => {
+  const parse = s => {
     s = s.trim()
     if (s === '現在') return now
     const ym = s.match(/(\d{4})年(\d{1,2})月/)
@@ -319,9 +526,14 @@ function calcDuration(period) {
   }
   const parts = period.split(' - ')
   if (parts.length < 2) return null
-  const s = parse(parts[0]), e = parse(parts[1])
-  const months = Math.max(1, (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth()))
-  const y = Math.floor(months / 12), m = months % 12
+  const s = parse(parts[0]),
+    e = parse(parts[1])
+  const months = Math.max(
+    1,
+    (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth())
+  )
+  const y = Math.floor(months / 12),
+    m = months % 12
   if (y > 0 && m > 0) return `${y}年${m}個月`
   if (y > 0) return `${y}年`
   return `${m}個月`
@@ -465,7 +677,6 @@ onUnmounted(() => {
 }
 
 @keyframes blink {
-
   0%,
   100% {
     opacity: 1;
@@ -520,7 +731,6 @@ onUnmounted(() => {
 }
 
 @keyframes bounce {
-
   0%,
   100% {
     transform: rotate(45deg) translateY(0);
@@ -715,10 +925,11 @@ onUnmounted(() => {
   height: 2px;
   background: var(--color-text);
   border-radius: 1px;
-  transition: left 220ms var(--ease-out), width 220ms var(--ease-out);
+  transition:
+    left 220ms var(--ease-out),
+    width 220ms var(--ease-out);
   pointer-events: none;
 }
-
 
 /* ── Contact ────────────────────────────────── */
 .contact-intro {
@@ -741,7 +952,9 @@ onUnmounted(() => {
   border-bottom: 1px solid var(--color-border);
   text-decoration: none;
   color: var(--color-text);
-  transition: background var(--transition-fast), padding-left var(--transition-fast);
+  transition:
+    background var(--transition-fast),
+    padding-left var(--transition-fast);
 }
 
 .contact-item:hover {
@@ -794,7 +1007,9 @@ onUnmounted(() => {
 /* ── Tab transition ─────────────────────────── */
 .tab-slide-enter-active,
 .tab-slide-leave-active {
-  transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out);
+  transition:
+    opacity 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
 }
 
 .tab-slide-enter-from {
@@ -832,7 +1047,9 @@ onUnmounted(() => {
   border-radius: 50%;
   background: var(--color-text);
   flex-shrink: 0;
-  box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 3px var(--color-border-strong);
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 3px var(--color-border-strong);
 }
 
 .timeline-line {
@@ -890,7 +1107,9 @@ onUnmounted(() => {
   opacity: 0;
   visibility: hidden;
   transform: translateY(8px);
-  transition: opacity var(--transition-normal), visibility var(--transition-normal),
+  transition:
+    opacity var(--transition-normal),
+    visibility var(--transition-normal),
     transform var(--transition-normal);
   z-index: 50;
 }

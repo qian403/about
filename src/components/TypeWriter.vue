@@ -5,7 +5,7 @@ const props = defineProps({
   texts: { type: Array, required: true },
   speed: { type: Number, default: 100 },
   deleteSpeed: { type: Number, default: 50 },
-  pause: { type: Number, default: 2000 }
+  pause: { type: Number, default: 2000 },
 })
 
 const displayText = ref('')
@@ -15,7 +15,7 @@ let timeout = null
 const typeText = () => {
   const text = props.texts[currentIndex.value]
   let charIndex = 0
-  
+
   const type = () => {
     if (charIndex < text.length) {
       displayText.value = text.slice(0, charIndex + 1)
@@ -25,7 +25,7 @@ const typeText = () => {
       timeout = setTimeout(deleteText, props.pause)
     }
   }
-  
+
   const deleteText = () => {
     if (displayText.value.length > 0) {
       displayText.value = displayText.value.slice(0, -1)
@@ -35,7 +35,7 @@ const typeText = () => {
       timeout = setTimeout(typeText, 500)
     }
   }
-  
+
   type()
 }
 
@@ -47,7 +47,7 @@ onUnmounted(() => {
 // 暴露內部狀態供測試使用
 defineExpose({
   displayText,
-  currentIndex
+  currentIndex,
 })
 </script>
 
@@ -76,8 +76,13 @@ defineExpose({
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 /* 尊重使用者的動畫偏好 */

@@ -2,8 +2,8 @@
   <div class="filterable-timeline">
     <!-- 篩選按鈕 -->
     <div class="timeline-filters" role="tablist" aria-label="經歷類別篩選">
-      <button 
-        v-for="filterOption in filterOptions" 
+      <button
+        v-for="filterOption in filterOptions"
         :key="filterOption.value"
         class="filter-btn"
         :class="{ active: currentFilter === filterOption.value }"
@@ -16,13 +16,18 @@
         <span>{{ filterOption.label }}</span>
       </button>
     </div>
-    
+
     <!-- 時間軸 -->
-    <div id="timeline-items" class="timeline" role="list" aria-label="經歷時間軸">
+    <div
+      id="timeline-items"
+      class="timeline"
+      role="list"
+      aria-label="經歷時間軸"
+    >
       <div class="timeline-line"></div>
       <TransitionGroup name="timeline-item">
-        <div 
-          v-for="item in filteredItems" 
+        <div
+          v-for="item in filteredItems"
           :key="item.id"
           class="timeline-item"
           :class="[item.type, { expanded: item.expanded }]"
@@ -39,24 +44,35 @@
           <div class="timeline-content">
             <div class="timeline-header">
               <span class="timeline-date">{{ item.period }}</span>
-              <span class="timeline-type-badge" :class="item.type">{{ getTypeLabel(item.type) }}</span>
+              <span class="timeline-type-badge" :class="item.type">{{
+                getTypeLabel(item.type)
+              }}</span>
             </div>
             <h3 class="timeline-title">{{ item.title }}</h3>
-            <p v-if="item.subtitle" class="timeline-subtitle">{{ item.subtitle }}</p>
+            <p v-if="item.subtitle" class="timeline-subtitle">
+              {{ item.subtitle }}
+            </p>
             <Transition name="expand">
               <div v-if="item.expanded" class="timeline-details">
                 <p class="timeline-description">{{ item.description }}</p>
                 <div v-if="item.tags && item.tags.length" class="timeline-tags">
-                  <span v-for="tag in item.tags" :key="tag" class="timeline-tag">{{ tag }}</span>
+                  <span
+                    v-for="tag in item.tags"
+                    :key="tag"
+                    class="timeline-tag"
+                    >{{ tag }}</span
+                  >
                 </div>
               </div>
             </Transition>
-            <button 
-              class="expand-btn" 
+            <button
+              class="expand-btn"
               :aria-label="item.expanded ? '收合詳情' : '展開詳情'"
               @click.stop="toggleExpand(item)"
             >
-              <md-icon aria-hidden="true">{{ item.expanded ? 'expand_less' : 'expand_more' }}</md-icon>
+              <md-icon aria-hidden="true">{{
+                item.expanded ? 'expand_less' : 'expand_more'
+              }}</md-icon>
             </button>
           </div>
         </div>
@@ -71,9 +87,8 @@ import { ref, computed } from 'vue'
 const props = defineProps({
   items: {
     type: Array,
-    required: true,
-    default: () => []
-  }
+    default: () => [],
+  },
 })
 
 const emit = defineEmits(['filter-change', 'item-expand'])
@@ -83,7 +98,7 @@ const filterOptions = [
   { value: 'work', label: '工作', icon: 'work' },
   { value: 'education', label: '教育', icon: 'school' },
   { value: 'community', label: '社群', icon: 'groups' },
-  { value: 'competition', label: '比賽', icon: 'emoji_events' }
+  { value: 'competition', label: '比賽', icon: 'emoji_events' },
 ]
 
 // 當前篩選條件
@@ -94,7 +109,7 @@ const typeIcons = {
   work: 'work',
   education: 'school',
   community: 'groups',
-  competition: 'emoji_events'
+  competition: 'emoji_events',
 }
 
 // 類別標籤對應
@@ -102,14 +117,14 @@ const typeLabels = {
   work: '工作',
   education: '教育',
   community: '社群',
-  competition: '比賽'
+  competition: '比賽',
 }
 
 // 取得類別圖示
-const getTypeIcon = (type) => typeIcons[type] || 'circle'
+const getTypeIcon = type => typeIcons[type] || 'circle'
 
 // 取得類別標籤
-const getTypeLabel = (type) => typeLabels[type] || type
+const getTypeLabel = type => typeLabels[type] || type
 
 // 篩選後的項目
 const filteredItems = computed(() => {
@@ -120,13 +135,13 @@ const filteredItems = computed(() => {
 })
 
 // 設定篩選條件
-const setFilter = (filter) => {
+const setFilter = filter => {
   currentFilter.value = filter
   emit('filter-change', filter)
 }
 
 // 切換展開狀態
-const toggleExpand = (item) => {
+const toggleExpand = item => {
   item.expanded = !item.expanded
   emit('item-expand', item)
 }
@@ -136,10 +151,9 @@ defineExpose({
   currentFilter,
   filteredItems,
   setFilter,
-  toggleExpand
+  toggleExpand,
 })
 </script>
-
 
 <style scoped>
 .filterable-timeline {
@@ -265,25 +279,33 @@ defineExpose({
   border-color: var(--color-work, #64b5f6);
   background: rgba(100, 181, 246, 0.1);
 }
-.timeline-marker.work md-icon { color: var(--color-work, #64b5f6); }
+.timeline-marker.work md-icon {
+  color: var(--color-work, #64b5f6);
+}
 
 .timeline-marker.education {
   border-color: var(--color-education, #81c784);
   background: rgba(129, 199, 132, 0.1);
 }
-.timeline-marker.education md-icon { color: var(--color-education, #81c784); }
+.timeline-marker.education md-icon {
+  color: var(--color-education, #81c784);
+}
 
 .timeline-marker.community {
   border-color: var(--color-community, #ffb74d);
   background: rgba(255, 183, 77, 0.1);
 }
-.timeline-marker.community md-icon { color: var(--color-community, #ffb74d); }
+.timeline-marker.community md-icon {
+  color: var(--color-community, #ffb74d);
+}
 
 .timeline-marker.competition {
   border-color: var(--color-competition, #f06292);
   background: rgba(240, 98, 146, 0.1);
 }
-.timeline-marker.competition md-icon { color: var(--color-competition, #f06292); }
+.timeline-marker.competition md-icon {
+  color: var(--color-competition, #f06292);
+}
 
 .timeline-item:hover .timeline-marker {
   transform: scale(1.1);
@@ -485,15 +507,15 @@ defineExpose({
   .expand-btn {
     transition: none;
   }
-  
+
   .timeline-item:hover {
     transform: none;
   }
-  
+
   .timeline-item:hover .timeline-marker {
     transform: none;
   }
-  
+
   .timeline-item-enter-active,
   .timeline-item-leave-active,
   .timeline-item-move,
@@ -508,48 +530,48 @@ defineExpose({
   .timeline-filters {
     gap: 0.5rem;
   }
-  
+
   .filter-btn {
     padding: 0.5rem 1rem;
     font-size: 0.8125rem;
   }
-  
+
   .filter-btn span {
     display: none;
   }
-  
+
   .filter-btn md-icon {
     font-size: 1.25rem;
     width: 1.25rem;
     height: 1.25rem;
   }
-  
+
   .timeline {
     padding-left: 50px;
   }
-  
+
   .timeline-line {
     left: 14px;
   }
-  
+
   .timeline-marker {
     left: -50px;
     width: 30px;
     height: 30px;
   }
-  
+
   .timeline-marker md-icon {
     font-size: 1rem;
   }
-  
+
   .timeline-content {
     padding: 1rem;
   }
-  
+
   .timeline-title {
     font-size: 1rem;
   }
-  
+
   .timeline-subtitle {
     font-size: 0.875rem;
   }
@@ -559,35 +581,35 @@ defineExpose({
   .timeline {
     padding-left: 40px;
   }
-  
+
   .timeline-line {
     left: 12px;
   }
-  
+
   .timeline-marker {
     left: -40px;
     width: 26px;
     height: 26px;
     border-width: 2px;
   }
-  
+
   .timeline-marker md-icon {
     font-size: 0.875rem;
   }
-  
+
   .timeline-content {
     padding: 0.875rem;
   }
-  
+
   .timeline-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .timeline-title {
     font-size: 0.9375rem;
   }
-  
+
   .expand-btn {
     right: 0.5rem;
     bottom: 0.5rem;

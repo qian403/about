@@ -1,15 +1,21 @@
 <template>
-  <nav class="navbar" :class="{ scrolled: isScrolled, 'menu-open': isMenuOpen }" role="navigation" aria-label="主要導航">
+  <nav
+    class="navbar"
+    :class="{ scrolled: isScrolled, 'menu-open': isMenuOpen }"
+    role="navigation"
+    aria-label="主要導航"
+  >
     <div class="nav-inner">
-      <a href="#" class="nav-brand" @click.prevent="scrollToTop" aria-label="回到首頁">
+      <a
+        href="#"
+        class="nav-brand"
+        aria-label="回到首頁"
+        @click.prevent="scrollToTop"
+      >
         chien.dev
       </a>
 
-      <div
-        class="nav-links"
-        :class="{ open: isMenuOpen }"
-        role="menubar"
-      >
+      <div class="nav-links" :class="{ open: isMenuOpen }" role="menubar">
         <a
           v-for="link in navLinks"
           :key="link.id"
@@ -18,15 +24,16 @@
           :class="{ active: currentSection === link.id }"
           role="menuitem"
           @click.prevent="handleNavClick(link.id)"
-        >{{ link.label }}</a>
+          >{{ link.label }}</a
+        >
       </div>
 
       <button
         class="nav-toggle"
-        @click="toggleMenu"
         :aria-expanded="isMenuOpen"
         aria-label="Toggle navigation menu"
         type="button"
+        @click="toggleMenu"
       >
         <span class="bar"></span>
         <span class="bar"></span>
@@ -43,13 +50,15 @@ const navLinks = [
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
   { id: 'skills', label: 'Skills' },
-  { id: 'contact', label: 'Contact' }
+  { id: 'contact', label: 'Contact' },
 ]
 
 const isScrolled = ref(false)
 const isMenuOpen = ref(false)
 const currentSection = ref('')
-const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1024)
+const windowWidth = ref(
+  typeof window !== 'undefined' ? window.innerWidth : 1024
+)
 
 const isMobile = computed(() => windowWidth.value <= 768)
 
@@ -58,7 +67,7 @@ const scrollToTop = () => {
   isMenuOpen.value = false
 }
 
-const handleNavClick = (id) => {
+const handleNavClick = id => {
   const el = document.getElementById(id)
   if (el) el.scrollIntoView({ behavior: 'smooth' })
   currentSection.value = id
@@ -78,7 +87,7 @@ const handleResize = () => {
   if (!isMobile.value) isMenuOpen.value = false
 }
 
-const handleKeydown = (e) => {
+const handleKeydown = e => {
   if (e.key === 'Escape') isMenuOpen.value = false
 }
 
@@ -90,9 +99,14 @@ onMounted(() => {
   window.addEventListener('keydown', handleKeydown)
   handleScroll()
 
-  const sections = navLinks.map(l => document.getElementById(l.id)).filter(Boolean)
+  const sections = navLinks
+    .map(l => document.getElementById(l.id))
+    .filter(Boolean)
   observer = new IntersectionObserver(
-    entries => { for (const e of entries) if (e.isIntersecting) currentSection.value = e.target.id },
+    entries => {
+      for (const e of entries)
+        if (e.isIntersecting) currentSection.value = e.target.id
+    },
     { rootMargin: '-20% 0px -70% 0px' }
   )
   sections.forEach(s => observer.observe(s))
@@ -105,7 +119,13 @@ onUnmounted(() => {
   observer?.disconnect()
 })
 
-defineExpose({ navLinks, currentSection, handleNavClick, scrollToTop, isMenuOpen })
+defineExpose({
+  navLinks,
+  currentSection,
+  handleNavClick,
+  scrollToTop,
+  isMenuOpen,
+})
 </script>
 
 <style scoped>
@@ -115,9 +135,10 @@ defineExpose({ navLinks, currentSection, handleNavClick, scrollToTop, isMenuOpen
   left: 0;
   right: 0;
   z-index: 100;
-  transition: background var(--transition-normal) var(--ease-out),
-              border-color var(--transition-normal) var(--ease-out),
-              box-shadow var(--transition-normal) var(--ease-out);
+  transition:
+    background var(--transition-normal) var(--ease-out),
+    border-color var(--transition-normal) var(--ease-out),
+    box-shadow var(--transition-normal) var(--ease-out);
   border-bottom: 1px solid transparent;
 }
 
@@ -170,8 +191,9 @@ defineExpose({ navLinks, currentSection, handleNavClick, scrollToTop, isMenuOpen
   font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
   border-radius: var(--radius-md);
-  transition: color var(--transition-fast) var(--ease-out),
-              background var(--transition-fast) var(--ease-out);
+  transition:
+    color var(--transition-fast) var(--ease-out),
+    background var(--transition-fast) var(--ease-out);
   min-height: var(--min-touch-target);
   min-width: var(--min-touch-target);
   display: flex;
@@ -180,7 +202,7 @@ defineExpose({ navLinks, currentSection, handleNavClick, scrollToTop, isMenuOpen
 
 .nav-link:hover {
   color: var(--color-text);
-  background: rgba(0,0,0,0.04);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .nav-link.active {
@@ -212,14 +234,24 @@ defineExpose({ navLinks, currentSection, handleNavClick, scrollToTop, isMenuOpen
   display: block;
 }
 
-.navbar.menu-open .bar:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
-.navbar.menu-open .bar:nth-child(2) { opacity: 0; }
-.navbar.menu-open .bar:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
+.navbar.menu-open .bar:nth-child(1) {
+  transform: rotate(45deg) translate(4.5px, 4.5px);
+}
+.navbar.menu-open .bar:nth-child(2) {
+  opacity: 0;
+}
+.navbar.menu-open .bar:nth-child(3) {
+  transform: rotate(-45deg) translate(4.5px, -4.5px);
+}
 
 @media (max-width: 768px) {
-  .nav-inner { padding: 0.75rem var(--spacing-md); }
+  .nav-inner {
+    padding: 0.75rem var(--spacing-md);
+  }
 
-  .nav-toggle { display: flex; }
+  .nav-toggle {
+    display: flex;
+  }
 
   .nav-links {
     position: fixed;
@@ -231,8 +263,9 @@ defineExpose({ navLinks, currentSection, handleNavClick, scrollToTop, isMenuOpen
     background: #ffffff;
     opacity: 0;
     visibility: hidden;
-    transition: opacity var(--transition-normal) var(--ease-out),
-                visibility var(--transition-normal) var(--ease-out);
+    transition:
+      opacity var(--transition-normal) var(--ease-out),
+      visibility var(--transition-normal) var(--ease-out);
     z-index: 100;
   }
 

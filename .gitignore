@@ -34,7 +34,4 @@ coverage
 *.ntvs*
 *.njsproj
 *.sln
-*.sw? 
-.cursorrules
-Resume_tw.md
-/.kiro
+*.sw?
