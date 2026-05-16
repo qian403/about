@@ -101,7 +101,17 @@
                   >
                 </div>
                 <p class="timeline-title">{{ item.title }}</p>
-                <p class="timeline-org">{{ item.company }}</p>
+                <p class="timeline-org">
+                  <a
+                    v-if="item.companyUrl"
+                    :href="item.companyUrl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="timeline-org-link"
+                    >{{ item.company }}</a
+                  >
+                  <span v-else>{{ item.company }}</span>
+                </p>
               </div>
             </div>
           </div>
@@ -121,56 +131,83 @@
           <h2 id="projects-title" class="section-title">專案作品</h2>
         </div>
         <div class="projects-list">
-          <div v-for="(p, i) in projects" :key="p.name" class="project-row">
-            <span class="project-num">{{
-              String(i + 1).padStart(2, '0')
-            }}</span>
-
-            <div class="project-info">
-              <h3 class="project-name">{{ p.name }}</h3>
-              <p class="project-desc">{{ p.description }}</p>
-            </div>
-
-            <div class="project-tags">
-              <span v-for="tag in p.tags" :key="tag" class="tag">{{
-                tag
+          <article v-for="p in projects" :key="p.id" class="project-row">
+            <button
+              class="project-main"
+              type="button"
+              :aria-expanded="isProjectExpanded(p.id)"
+              :aria-controls="`project-detail-${p.id}`"
+              @click="toggleProject(p.id)"
+            >
+              <span class="project-num">{{
+                String(p.order).padStart(2, '0')
               }}</span>
-            </div>
 
-            <div class="project-actions">
-              <a
-                v-if="p.github"
-                :href="p.github"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="project-action-link"
-                :aria-label="`${p.name} GitHub`"
-              >
-                <svg
-                  width="15"
-                  height="15"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
-                  />
-                </svg>
-                GitHub
-              </a>
-              <a
-                v-if="p.demo"
-                :href="p.demo"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="project-action-link project-action-primary"
-                :aria-label="`${p.name} ${p.demoLabel || 'Demo'}`"
-              >
-                {{ p.demoLabel || 'Demo' }} →
-              </a>
+              <span class="project-info">
+                <span class="project-name">{{ p.name }}</span>
+                <span class="project-desc">{{ p.description }}</span>
+              </span>
+
+              <span class="project-tags">
+                <span v-for="tag in p.tags" :key="tag" class="tag">{{
+                  tag
+                }}</span>
+              </span>
+
+              <span class="project-expand-indicator" aria-hidden="true">{{
+                isProjectExpanded(p.id) ? '−' : '+'
+              }}</span>
+            </button>
+
+            <div
+              :id="`project-detail-${p.id}`"
+              class="project-details"
+              :class="{ open: isProjectExpanded(p.id) }"
+              :aria-hidden="!isProjectExpanded(p.id)"
+              :inert="!isProjectExpanded(p.id)"
+            >
+              <div class="project-details-inner">
+                <p class="project-detail-text">{{ p.details }}</p>
+                <ul class="project-detail-list">
+                  <li v-for="item in p.highlights" :key="item">{{ item }}</li>
+                </ul>
+
+                <div class="project-actions">
+                  <a
+                    v-if="p.github"
+                    :href="p.github"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="project-action-link"
+                    :aria-label="`${p.name} GitHub`"
+                  >
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                      />
+                    </svg>
+                    GitHub
+                  </a>
+                  <a
+                    v-if="p.demo"
+                    :href="p.demo"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="project-action-link project-action-primary"
+                    :aria-label="`${p.name} ${p.demoLabel || 'Demo'}`"
+                  >
+                    {{ p.demoLabel || 'Demo' }} →
+                  </a>
+                </div>
+              </div>
             </div>
-          </div>
+          </article>
         </div>
 
         <p class="projects-more">
@@ -242,7 +279,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="site-footer">
+    <footer ref="footerRef" class="site-footer">
       <div class="container">
         <p>
           © 2026 HSU CHIA CHIEN &nbsp;·&nbsp; Built with Vue.js &nbsp;·&nbsp;
@@ -260,6 +297,7 @@
     <button
       class="back-to-top"
       :class="{ visible: showBackToTop }"
+      :style="{ '--footer-overlap': `${footerOverlap}px` }"
       aria-label="回到頂部"
       type="button"
       :tabindex="showBackToTop ? 0 : -1"
@@ -280,23 +318,49 @@ const roles = ['Backend Developer', 'Security Enthusiast']
 
 const projects = [
   {
+    id: 'web-tools',
+    order: 1,
     name: 'Web Tools',
     description: '實用網頁工具集合',
+    details:
+      '集合常用的線上小工具，聚焦在打開即用與快速載入，提供穩定的日常使用體驗。',
+    highlights: [
+      '多個工具整合於同一介面，降低切換成本',
+      '針對行動裝置做版面優化，使用上手快',
+      '持續迭代工具清單與操作流程',
+    ],
     tags: ['Vue.js', 'Tools'],
     github: 'https://github.com/qian403/web-tools',
     demo: 'https://tools.chien.dev',
     demoLabel: '前往網站',
   },
   {
+    id: 'catch-the-diff',
+    order: 2,
     name: 'CatchTheDiff',
     description: '定時爬取各家新聞網站並記錄版本變更，追蹤新聞修改痕跡',
+    details: '透過排程爬蟲長期蒐集新聞版本差異，幫助觀察內容修訂與敘事變化。',
+    highlights: [
+      '自動化抓取與版本比對流程',
+      '可回溯修改歷程，提升內容透明度',
+      '適合資料研究與媒體觀察場景',
+    ],
     tags: ['Python', 'Crawler', 'News'],
     github: 'https://github.com/qian403/CatchTheDiff',
     demo: null,
   },
   {
+    id: 'futurenest-chatbot',
+    order: 3,
     name: 'FutureNest Chatbot',
     description: '具備 RAG 功能的 Chatbot，使用 Django + React.js 建構',
+    details:
+      '建立可檢索外部知識的聊天機器人，將語意搜尋與生成能力整合成完整問答流程。',
+    highlights: [
+      'RAG 管線整合，提升回答可用性',
+      '前後端分離架構，方便模組化擴充',
+      '可依資料來源調整檢索策略與提示詞',
+    ],
     tags: ['Django', 'React', 'RAG', 'Python'],
     github: 'https://github.com/qian403/futurenest-chatbot',
     demo: null,
@@ -353,6 +417,7 @@ const experienceData = [
     type: 'community',
     title: '總召',
     company: 'SITCON 學生計算機年會 2026',
+    companyUrl: 'https://sitcon.org/2026/',
     period: '2025年 - 2026年',
   },
   {
@@ -360,6 +425,7 @@ const experienceData = [
     type: 'community',
     title: '副召',
     company: 'SITCON Camp 2025',
+    companyUrl: 'https://sitcon.camp/2025/',
     period: '2025年',
   },
   {
@@ -367,6 +433,7 @@ const experienceData = [
     type: 'community',
     title: '行政組副組長',
     company: 'SITCON 學生計算機年會 2025',
+    companyUrl: 'https://sitcon.org/2025/',
     period: '2024年 - 2025年',
   },
   {
@@ -374,6 +441,7 @@ const experienceData = [
     type: 'community',
     title: '場務組志工',
     company: 'SITCON 學生計算機年會 2024',
+    companyUrl: 'https://sitcon.org/2024/',
     period: '2024年',
   },
   {
@@ -434,9 +502,17 @@ const contacts = [
 
 const currentRole = ref(roles[0])
 const showBackToTop = ref(false)
+const expandedProject = ref(null)
+const footerRef = ref(null)
+const footerOverlap = ref(0)
 const avatarRef = ref(null)
 const avatarRotation = ref(0)
 const currentTab = ref('work')
+
+const isProjectExpanded = projectId => expandedProject.value === projectId
+const toggleProject = projectId => {
+  expandedProject.value = expandedProject.value === projectId ? null : projectId
+}
 
 // Tab indicator
 const tabsRef = ref(null)
@@ -496,8 +572,19 @@ const updateAvatarExitY = () => {
   avatarExitY = rect.bottom + window.scrollY
 }
 
+const updateBackToTopPosition = () => {
+  if (!footerRef.value) {
+    footerOverlap.value = 0
+    return
+  }
+
+  const footerTop = footerRef.value.getBoundingClientRect().top
+  footerOverlap.value = Math.max(window.innerHeight - footerTop, 0)
+}
+
 const handleScroll = () => {
   showBackToTop.value = window.scrollY > 300
+  updateBackToTopPosition()
 
   if (prefersReducedMotion.matches || avatarExitY <= 0 || rafPending) return
   rafPending = true
@@ -505,6 +592,11 @@ const handleScroll = () => {
     avatarRotation.value = Math.min(window.scrollY / avatarExitY, 1) * 360
     rafPending = false
   })
+}
+
+const handleResize = () => {
+  updateAvatarExitY()
+  updateBackToTopPosition()
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -552,10 +644,10 @@ const filteredExp = computed(() =>
 onMounted(() => {
   resumeRoleCycling()
   window.addEventListener('scroll', handleScroll, { passive: true })
-  window.addEventListener('resize', updateAvatarExitY, { passive: true })
+  window.addEventListener('resize', handleResize, { passive: true })
   document.addEventListener('visibilitychange', handleVisibilityChange)
   nextTick(() => {
-    updateAvatarExitY()
+    handleResize()
     updateIndicator(currentTab.value)
   })
 })
@@ -563,7 +655,7 @@ onMounted(() => {
 onUnmounted(() => {
   pauseRoleCycling()
   window.removeEventListener('scroll', handleScroll)
-  window.removeEventListener('resize', updateAvatarExitY)
+  window.removeEventListener('resize', handleResize)
   document.removeEventListener('visibilitychange', handleVisibilityChange)
 })
 </script>
@@ -777,17 +869,31 @@ onUnmounted(() => {
 }
 
 .project-row {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.project-main {
   display: grid;
   grid-template-columns: 2.5rem 1fr auto auto;
   gap: var(--spacing-xl);
   align-items: center;
+  width: 100%;
   padding: var(--spacing-lg) 0;
-  border-bottom: 1px solid var(--color-border);
+  border: none;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
   transition: padding-left var(--transition-fast) var(--ease-out);
 }
 
-.project-row:hover {
+.project-main:hover {
   padding-left: var(--spacing-sm);
+}
+
+.project-main:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
 }
 
 .project-num {
@@ -800,9 +906,11 @@ onUnmounted(() => {
 
 .project-info {
   min-width: 0;
+  display: block;
 }
 
 .project-name {
+  display: block;
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text);
@@ -813,6 +921,7 @@ onUnmounted(() => {
 }
 
 .project-desc {
+  display: block;
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   white-space: nowrap;
@@ -827,10 +936,68 @@ onUnmounted(() => {
   justify-content: flex-end;
 }
 
+.project-expand-indicator {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+}
+
+.project-details {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(-4px);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    grid-template-rows 240ms var(--ease-out),
+    opacity 180ms var(--ease-out),
+    transform 180ms var(--ease-out),
+    visibility 0s linear 240ms;
+}
+
+.project-details.open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    grid-template-rows 240ms var(--ease-out),
+    opacity 180ms var(--ease-out),
+    transform 180ms var(--ease-out),
+    visibility 0s;
+}
+
+.project-details-inner {
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 0 var(--spacing-sm) calc(2.5rem + var(--spacing-xl));
+}
+
+.project-detail-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-sm);
+}
+
+.project-detail-list {
+  margin: 0 0 var(--spacing-md);
+  padding-left: 1rem;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.project-detail-list li + li {
+  margin-top: 0.25rem;
+}
+
 .project-actions {
   display: flex;
   gap: var(--spacing-md);
   align-items: center;
+  flex-wrap: wrap;
   flex-shrink: 0;
 }
 
@@ -1088,10 +1255,22 @@ onUnmounted(() => {
   color: var(--color-text-secondary);
 }
 
+.timeline-org-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.timeline-org-link:hover {
+  color: var(--color-text);
+}
+
 /* ── Back to top ────────────────────────────── */
 .back-to-top {
+  --back-to-top-offset: var(--spacing-xl);
+  --footer-overlap: 0px;
   position: fixed;
-  bottom: var(--spacing-xl);
+  bottom: calc(var(--back-to-top-offset) + var(--footer-overlap));
   right: var(--spacing-xl);
   width: 40px;
   height: 40px;
@@ -1154,9 +1333,9 @@ onUnmounted(() => {
     padding: var(--spacing-2xl) 0;
   }
 
-  .project-row {
+  .project-main {
     grid-template-columns: 2rem 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto auto;
     row-gap: var(--spacing-sm);
   }
 
@@ -1165,8 +1344,12 @@ onUnmounted(() => {
     justify-content: flex-start;
   }
 
-  .project-actions {
+  .project-expand-indicator {
     grid-column: 2;
+  }
+
+  .project-details-inner {
+    padding-left: calc(2rem + var(--spacing-sm));
   }
 
   .skills-grid {
@@ -1181,8 +1364,12 @@ onUnmounted(() => {
     font-size: var(--font-size-xs);
   }
 
+  #contact .contact-item:last-child {
+    margin-bottom: calc(40px + var(--spacing-md) + env(safe-area-inset-bottom));
+  }
+
   .back-to-top {
-    bottom: var(--spacing-lg);
+    --back-to-top-offset: var(--spacing-lg);
     right: var(--spacing-lg);
   }
 }
@@ -1206,7 +1393,7 @@ onUnmounted(() => {
 
 /* touch devices: neutralize hover-triggered transforms during scroll */
 @media (hover: none) and (pointer: coarse) {
-  .project-row:hover {
+  .project-main:hover {
     padding-left: 0;
   }
 
