@@ -28,7 +28,7 @@ const LEVEL_LABELS = {
 
 // Function to get level label (extracted from HomeView.vue)
 const getLevelLabel = level => {
-  return LEVEL_LABELS[level] || level
+  return Object.hasOwn(LEVEL_LABELS, level) ? LEVEL_LABELS[level] : level
 }
 
 // Arbitrary for generating valid skill data

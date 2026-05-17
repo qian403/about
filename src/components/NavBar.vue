@@ -1,4 +1,5 @@
 <template>
+  <div ref="sentinelRef" class="scroll-sentinel" aria-hidden="true"></div>
   <nav
     class="navbar"
     :class="{ scrolled: isScrolled, 'menu-open': isMenuOpen }"
@@ -78,10 +79,6 @@ const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
-const handleScroll = () => {
-  isScrolled.value = window.scrollY > 40
-}
-
 const handleResize = () => {
   windowWidth.value = window.innerWidth
   if (!isMobile.value) isMenuOpen.value = false
@@ -91,32 +88,61 @@ const handleKeydown = e => {
   if (e.key === 'Escape') isMenuOpen.value = false
 }
 
+const sentinelRef = ref(null)
 let observer = null
+let sentinelObserver = null
+
+/** 記錄各 section 是否在觀測帶內（rootMargin 定義的區間） */
+const sectionInView = {}
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll, { passive: true })
   window.addEventListener('resize', handleResize, { passive: true })
   window.addEventListener('keydown', handleKeydown)
-  handleScroll()
+
+  // 哨兵元素：觀察頁面頂端，取代 scroll 事件偵測
+  sentinelObserver = new IntersectionObserver(
+    ([entry]) => {
+      isScrolled.value = !entry.isIntersecting
+    },
+    { rootMargin: '40px 0px 0px 0px' }
+  )
+  if (sentinelRef.value) sentinelObserver.observe(sentinelRef.value)
 
   const sections = navLinks
     .map(l => document.getElementById(l.id))
     .filter(Boolean)
+  sections.forEach(s => {
+    sectionInView[s.id] = false
+  })
   observer = new IntersectionObserver(
     entries => {
-      for (const e of entries)
-        if (e.isIntersecting) currentSection.value = e.target.id
+      // 更新所有 section 的觀測狀態
+      for (const e of entries) {
+        sectionInView[e.target.id] = e.isIntersecting
+      }
+
+      // 選取目前在觀測帶內的「最後一個」section（DOM 順序）
+      // 觀測帶為 viewport 上方 20%~100%（排除最上方 20% 的 Header 區域）
+      // 往下滾時，最新進入觀測帶的 section 會覆蓋前面的；往上滾則自然讓出
+      let lastActive = ''
+      for (const link of navLinks) {
+        if (sectionInView[link.id]) lastActive = link.id
+      }
+
+      if (lastActive) {
+        currentSection.value = lastActive
+      }
     },
-    { rootMargin: '-20% 0px -70% 0px' }
+    { rootMargin: '-20% 0px 0px 0px' }
   )
   sections.forEach(s => observer.observe(s))
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
   window.removeEventListener('resize', handleResize)
   window.removeEventListener('keydown', handleKeydown)
   observer?.disconnect()
+  sentinelObserver?.disconnect()
 })
 
 defineExpose({
@@ -242,6 +268,13 @@ defineExpose({
 }
 .navbar.menu-open .bar:nth-child(3) {
   transform: rotate(-45deg) translate(4.5px, -4.5px);
+}
+
+.scroll-sentinel {
+  display: block;
+  height: 1px;
+  margin-bottom: -1px;
+  pointer-events: none;
 }
 
 @media (max-width: 768px) {

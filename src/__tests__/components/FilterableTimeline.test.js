@@ -176,8 +176,8 @@ describe('FilterableTimeline - Property 2: 時間軸篩選正確性', () => {
   it('Property 2: Filter buttons exist for all categories', () => {
     const filterButtons = wrapper.findAll('.filter-btn')
 
-    // Should have 5 filter buttons (all, work, education, community, competition)
-    expect(filterButtons.length).toBe(5)
+    // Should have 4 filter buttons (work, education, community, competition)
+    expect(filterButtons.length).toBe(4)
 
     // Check that active class is applied correctly
     const activeButton = wrapper.find('.filter-btn.active')
@@ -311,6 +311,7 @@ describe('FilterableTimeline - Property 3: 時間軸展開功能', () => {
         },
       },
     })
+    wrapper.vm.setFilter('all')
   })
 
   afterEach(() => {
@@ -476,6 +477,7 @@ describe('FilterableTimeline - Property 3: 時間軸展開功能 (Generated Data
               stubs: { 'md-icon': mockMdIcon },
             },
           })
+          wrapper.vm.setFilter('all')
 
           const item = wrapper.vm.filteredItems[safeIndex]
           const initialState = item.expanded

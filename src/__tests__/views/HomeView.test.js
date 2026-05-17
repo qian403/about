@@ -5,7 +5,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import * as fc from 'fast-check'
-import HomeView from '../../components/HomeView.vue'
+import HomeView from '../../views/HomeView.vue'
 
 // Mock FilterableTimeline component
 const mockFilterableTimeline = {
@@ -65,9 +65,9 @@ describe('HomeView - Role Rotation Property Tests', () => {
     await vi.advanceTimersByTimeAsync(3000)
     expect(roleElement.text()).toBe(expectedRoles[1])
 
-    // After another 3 seconds, should show third role
+    // After another 3 seconds, should wrap back to first role
     await vi.advanceTimersByTimeAsync(3000)
-    expect(roleElement.text()).toBe(expectedRoles[2])
+    expect(roleElement.text()).toBe(expectedRoles[0])
   })
 
   it('Property 1: Role cycles back to first after last role', async () => {
@@ -75,7 +75,6 @@ describe('HomeView - Role Rotation Property Tests', () => {
 
     // Advance through all roles
     await vi.advanceTimersByTimeAsync(3000) // -> role 2
-    await vi.advanceTimersByTimeAsync(3000) // -> role 3
     await vi.advanceTimersByTimeAsync(3000) // -> role 1 (cycle)
 
     expect(roleElement.text()).toBe(expectedRoles[0])

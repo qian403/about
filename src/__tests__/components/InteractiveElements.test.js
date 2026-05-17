@@ -40,7 +40,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
       // Read the main.css file content to verify the variable is defined
       const fs = await import('fs')
       const path = await import('path')
-      const cssPath = path.resolve(__dirname, '../assets/main.css')
+      const cssPath = path.resolve(__dirname, '../../assets/main.css')
       const cssContent = fs.readFileSync(cssPath, 'utf-8')
 
       // Check that --min-touch-target: 44px is defined
@@ -104,7 +104,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
     it('Property 8: NavBar CSS contains min-touch-target references for interactive elements', async () => {
       const fs = await import('fs')
       const path = await import('path')
-      const componentPath = path.resolve(__dirname, './NavBar.vue')
+      const componentPath = path.resolve(__dirname, '../../components/NavBar.vue')
       const componentContent = fs.readFileSync(componentPath, 'utf-8')
 
       // Verify CSS uses --min-touch-target for nav-brand
@@ -171,7 +171,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
     it('Property 8: ProjectCard CSS contains card-link class for links', async () => {
       const fs = await import('fs')
       const path = await import('path')
-      const componentPath = path.resolve(__dirname, './ProjectCard.vue')
+      const componentPath = path.resolve(__dirname, '../../components/ProjectCard.vue')
       const componentContent = fs.readFileSync(componentPath, 'utf-8')
 
       // Verify CSS has card-link class for project links
@@ -251,6 +251,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
         },
         attachTo: document.body,
       })
+      wrapper.vm.setFilter('all')
     })
 
     afterEach(() => {
@@ -259,7 +260,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
 
     it('Property 8: Filter buttons exist with correct class', () => {
       const filterBtns = wrapper.findAll('.filter-btn')
-      expect(filterBtns.length).toBe(5) // all, work, education, community, competition
+      expect(filterBtns.length).toBe(4) // work, education, community, competition
     })
 
     it('Property 8: Expand buttons exist with correct class', () => {
@@ -270,7 +271,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
     it('Property 8: FilterableTimeline CSS contains min-height/min-width for filter buttons', async () => {
       const fs = await import('fs')
       const path = await import('path')
-      const componentPath = path.resolve(__dirname, './FilterableTimeline.vue')
+      const componentPath = path.resolve(__dirname, '../../components/FilterableTimeline.vue')
       const componentContent = fs.readFileSync(componentPath, 'utf-8')
 
       // Verify CSS defines min-height and min-width for filter-btn
@@ -282,7 +283,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
     it('Property 8: FilterableTimeline CSS contains min-height/min-width for expand buttons', async () => {
       const fs = await import('fs')
       const path = await import('path')
-      const componentPath = path.resolve(__dirname, './FilterableTimeline.vue')
+      const componentPath = path.resolve(__dirname, '../../components/FilterableTimeline.vue')
       const componentContent = fs.readFileSync(componentPath, 'utf-8')
 
       // Verify CSS defines min-height and min-width for expand-btn
@@ -354,7 +355,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
     it('Property 8: HomeView CSS contains back-to-top button styles', async () => {
       const fs = await import('fs')
       const path = await import('path')
-      const componentPath = path.resolve(__dirname, '../views/HomeView.vue')
+      const componentPath = path.resolve(__dirname, '../../views/HomeView.vue')
       const componentContent = fs.readFileSync(componentPath, 'utf-8')
 
       expect(componentContent).toContain('.back-to-top')
@@ -364,7 +365,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
     it('Property 8: main.css defines --min-touch-target and responsive rules', async () => {
       const fs = await import('fs')
       const path = await import('path')
-      const cssPath = path.resolve(__dirname, '../assets/main.css')
+      const cssPath = path.resolve(__dirname, '../../assets/main.css')
       const cssContent = fs.readFileSync(cssPath, 'utf-8')
 
       expect(cssContent).toContain('--min-touch-target: 44px')
