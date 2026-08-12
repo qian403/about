@@ -40,9 +40,14 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          vuetify: ['vuetify'],
-          'vue-vendor': ['vue', 'vue-router'],
+        manualChunks(id) {
+          if (id.includes('/node_modules/vuetify/')) return 'vuetify'
+          if (
+            id.includes('/node_modules/vue/') ||
+            id.includes('/node_modules/vue-router/')
+          ) {
+            return 'vue-vendor'
+          }
         },
       },
     },

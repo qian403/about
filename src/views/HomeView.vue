@@ -10,36 +10,93 @@
     <NavBar />
 
     <!-- Hero -->
-    <header class="hero" role="banner">
-      <div class="hero-layout">
-        <div class="hero-avatar-col">
-          <img
-            ref="avatarRef"
-            class="hero-avatar"
-            src="/avatar.jpg"
-            alt="HSU CHIA CHIEN"
-            width="400"
-            height="400"
-            :style="{ transform: `rotate(${avatarRotation}deg)` }"
-            @load="updateAvatarExitY"
-          />
+    <header class="hero" role="banner" :data-weather="background.key">
+      <picture class="hero-weather-picture" aria-hidden="true">
+        <source
+          media="(max-width: 768px)"
+          :srcset="background.mobileSrc"
+          type="image/webp"
+        />
+        <source :srcset="background.desktopSrc" type="image/webp" />
+        <img
+          class="hero-weather-bg"
+          :src="background.src"
+          alt=""
+          width="1920"
+          height="1280"
+          fetchpriority="high"
+        />
+      </picture>
+      <div class="hero-scrim" aria-hidden="true"></div>
+
+      <div class="hero-content">
+        <div
+          class="weather-status"
+          :class="{ loading: isLoading }"
+          aria-live="polite"
+          aria-label="宜蘭即時天氣"
+        >
+          <span class="weather-location">
+            <svg class="weather-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path :d="mdiMapMarkerOutline" />
+            </svg>
+            宜蘭
+          </span>
+          <span class="weather-live">{{
+            isDemo ? '展示' : isLive ? '即時' : '備援'
+          }}</span>
+          <span class="weather-temperature">{{ displayTemperature }}C</span>
+          <span class="weather-condition">{{ condition }}</span>
+          <span v-if="weather.humidity !== null" class="weather-detail">
+            <svg class="weather-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path :d="mdiWaterPercent" />
+            </svg>
+            {{ weather.humidity }}%
+          </span>
+          <span v-if="weather.windSpeed !== null" class="weather-detail">
+            <svg class="weather-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path :d="mdiWeatherWindy" />
+            </svg>
+            {{ weather.windSpeed }} km/h
+          </span>
+          <time
+            v-if="observedTime"
+            class="weather-time"
+            :datetime="observedDateTime"
+            >{{ observedTime }}</time
+          >
         </div>
-        <div class="hero-text-col">
-          <p class="hero-sub">Hi, I'm</p>
-          <h1 class="hero-name">HSU CHIA CHIEN</h1>
-          <p class="hero-role">{{ currentRole }}</p>
-          <p class="hero-tagline">用程式碼解決問題，用社群連結人們</p>
-          <div class="hero-actions">
-            <button class="btn" @click="scrollToSection('contact')">
-              聯絡我
-            </button>
-            <a
-              class="btn btn-primary"
-              href="https://blog.chien.dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Blog →</a
-            >
+
+        <div class="hero-layout">
+          <div class="hero-avatar-col">
+            <img
+              ref="avatarRef"
+              class="hero-avatar"
+              src="/avatar.jpg"
+              alt="HSU CHIA CHIEN"
+              width="400"
+              height="400"
+              :style="{ transform: `rotate(${avatarRotation}deg)` }"
+              @load="updateAvatarExitY"
+            />
+          </div>
+          <div class="hero-text-col">
+            <p class="hero-sub">Hi, I'm</p>
+            <h1 class="hero-name">HSU CHIA CHIEN</h1>
+            <p class="hero-role">{{ currentRole }}</p>
+            <p class="hero-tagline">用程式碼解決問題，用社群連結人們</p>
+            <div class="hero-actions">
+              <button class="btn" @click="scrollToSection('contact')">
+                聯絡我
+              </button>
+              <a
+                class="btn btn-primary"
+                href="https://blog.chien.dev"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Blog →</a
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -289,6 +346,13 @@
             rel="noopener noreferrer"
             >Source</a
           >
+          &nbsp;·&nbsp; Weather by
+          <a
+            href="https://open-meteo.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Open-Meteo</a
+          >
         </p>
       </div>
     </footer>
@@ -310,7 +374,9 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { mdiMapMarkerOutline, mdiWaterPercent, mdiWeatherWindy } from '@mdi/js'
 import NavBar from '../components/NavBar.vue'
+import { useYilanWeather } from '../composables/useYilanWeather'
 
 // ── Static data (plain const — never reassigned, no reactivity needed) ─────
 
@@ -508,6 +574,22 @@ const footerOverlap = ref(0)
 const avatarRef = ref(null)
 const avatarRotation = ref(0)
 const currentTab = ref('work')
+const {
+  weather,
+  condition,
+  background,
+  observedTime,
+  observedDateTime,
+  isLoading,
+  isLive,
+  isDemo,
+} = useYilanWeather()
+
+const displayTemperature = computed(() =>
+  weather.value.temperature === null
+    ? '--°'
+    : `${Math.round(weather.value.temperature)}°`
+)
 
 const isProjectExpanded = projectId => expandedProject.value === projectId
 const toggleProject = projectId => {
@@ -585,6 +667,10 @@ const updateBackToTopPosition = () => {
 const handleScroll = () => {
   showBackToTop.value = window.scrollY > 300
   updateBackToTopPosition()
+  document.documentElement.classList.toggle(
+    'hero-scrollbar',
+    window.scrollY < window.innerHeight - 80
+  )
 
   if (prefersReducedMotion.matches || avatarExitY <= 0 || rafPending) return
   rafPending = true
@@ -648,6 +734,7 @@ onMounted(() => {
   document.addEventListener('visibilitychange', handleVisibilityChange)
   nextTick(() => {
     handleResize()
+    handleScroll()
     updateIndicator(currentTab.value)
   })
 })
@@ -657,6 +744,7 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   window.removeEventListener('resize', handleResize)
   document.removeEventListener('visibilitychange', handleVisibilityChange)
+  document.documentElement.classList.remove('hero-scrollbar')
 })
 </script>
 
@@ -683,12 +771,114 @@ onUnmounted(() => {
 /* ── Hero ───────────────────────────────────── */
 .hero {
   min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 6rem var(--spacing-xl) 4rem;
   position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: #263843;
+  color: #ffffff;
+}
+
+.hero-weather-picture,
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-weather-picture {
+  z-index: -2;
+  display: block;
+  overflow: hidden;
+}
+
+.hero-weather-bg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-scrim {
+  z-index: -1;
+  background: rgba(6, 12, 17, 0.6);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--max-width-content);
+}
+
+.weather-status {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.34);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.weather-status.loading {
+  opacity: 0.72;
+}
+
+.weather-location,
+.weather-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.weather-location {
+  font-weight: var(--font-weight-semibold);
+}
+
+.weather-icon {
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
+  flex: 0 0 auto;
+}
+
+.weather-live {
+  padding: 0.1rem 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  border-radius: var(--radius-sm);
+  font-size: 0.65rem;
+  font-weight: var(--font-weight-bold);
+}
+
+.weather-temperature {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+}
+
+.weather-condition {
+  font-weight: var(--font-weight-medium);
+}
+
+.weather-detail,
+.weather-time {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: var(--font-size-xs);
+}
+
+.weather-time {
+  margin-left: auto;
 }
 
 .hero-layout {
@@ -698,6 +888,7 @@ onUnmounted(() => {
   align-items: center;
   width: 100%;
   max-width: var(--max-width-content);
+  margin-top: clamp(1.5rem, 4vh, 3rem);
 }
 
 .hero-avatar-col {
@@ -714,6 +905,9 @@ onUnmounted(() => {
   display: block;
   transform-origin: center center;
   will-change: transform;
+  border: 4px solid rgba(255, 255, 255, 0.84);
+  border-radius: 50%;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -732,11 +926,12 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
 }
 
 .hero-sub {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: #ffffff;
   letter-spacing: 0.08em;
   margin-bottom: 0.5rem;
 }
@@ -745,26 +940,26 @@ onUnmounted(() => {
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: var(--font-weight-extrabold);
   letter-spacing: -0.025em;
-  color: var(--color-text);
+  color: #ffffff;
   line-height: 1.1;
   margin-bottom: 1.25rem;
 }
 
 .hero-role {
   font-size: clamp(0.9rem, 2vw, 1.1rem);
-  color: var(--color-text-secondary);
+  color: #ffffff;
   font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
   margin-bottom: 1rem;
 }
 
 .hero-role::before {
   content: '$ ';
-  color: var(--color-text-muted);
+  color: #ffffff;
 }
 
 .hero-role::after {
   content: '|';
-  color: var(--color-accent);
+  color: #ffffff;
   animation: blink 1s step-end infinite;
 }
 
@@ -781,7 +976,7 @@ onUnmounted(() => {
 
 .hero-tagline {
   font-size: var(--font-size-md);
-  color: var(--color-text-muted);
+  color: #ffffff;
   margin-bottom: 2.5rem;
   line-height: var(--line-height-relaxed);
 }
@@ -790,6 +985,29 @@ onUnmounted(() => {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
+}
+
+.hero .btn {
+  border-color: rgba(255, 255, 255, 0.72);
+  background: rgba(0, 0, 0, 0.08);
+  color: #ffffff;
+}
+
+.hero .btn:hover {
+  border-color: #ffffff;
+  background: #ffffff;
+  color: #111111;
+}
+
+.hero .btn-primary {
+  border-color: #ffffff;
+  background: #ffffff;
+  color: #111111;
+}
+
+.hero .btn-primary:hover {
+  border-color: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .scroll-hint {
@@ -801,7 +1019,7 @@ onUnmounted(() => {
   width: 36px;
   height: 36px;
   background: transparent;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius-full);
   cursor: pointer;
   opacity: 0.5;
@@ -815,8 +1033,8 @@ onUnmounted(() => {
 .scroll-arrow {
   width: 8px;
   height: 8px;
-  border-right: 1.5px solid var(--color-text);
-  border-bottom: 1.5px solid var(--color-text);
+  border-right: 1.5px solid #ffffff;
+  border-bottom: 1.5px solid #ffffff;
   transform: rotate(45deg);
   margin-bottom: 3px;
   animation: bounce 1.8s ease-in-out infinite;
@@ -1312,12 +1530,22 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .hero {
-    padding: 5rem var(--spacing-md) 3rem;
+    padding: 4.75rem var(--spacing-md) 3.5rem;
+  }
+
+  .weather-status {
+    flex-wrap: wrap;
+    gap: 0.45rem 0.65rem;
+  }
+
+  .weather-time {
+    margin-left: 0;
   }
 
   .hero-layout {
     grid-template-columns: 1fr;
-    gap: var(--spacing-xl);
+    gap: 1.25rem;
+    margin-top: 1.25rem;
     text-align: center;
   }
 
@@ -1326,7 +1554,15 @@ onUnmounted(() => {
   }
 
   .hero-avatar {
-    width: min(200px, 60vw);
+    width: min(150px, 42vw);
+  }
+
+  .hero-name {
+    margin-bottom: 0.85rem;
+  }
+
+  .hero-tagline {
+    margin-bottom: 1.5rem;
   }
 
   .section {
@@ -1376,10 +1612,7 @@ onUnmounted(() => {
 
 @media (max-width: 480px) {
   .hero-actions {
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    max-width: 240px;
+    justify-content: center;
   }
 
   .btn {

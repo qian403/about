@@ -173,6 +173,20 @@ defineExpose({
   border-bottom-color: var(--color-border);
 }
 
+.navbar:not(.scrolled):not(.menu-open) .nav-brand,
+.navbar:not(.scrolled):not(.menu-open) .nav-link {
+  color: #ffffff;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+}
+
+.navbar:not(.scrolled):not(.menu-open) .nav-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.navbar:not(.scrolled):not(.menu-open) .bar {
+  background: #ffffff;
+}
+
 @media (hover: hover) {
   .navbar.scrolled {
     background: rgba(255, 255, 255, 0.88);
