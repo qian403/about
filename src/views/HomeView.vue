@@ -455,7 +455,8 @@ const experienceData = [
     type: 'work',
     title: '實習工程師',
     company: '瀚霖智動銷售科技有限公司',
-    period: '2024年11月 - 現在',
+    period: '2024年11月 - 2025年6月、2025年12月 - 現在',
+    countMonthsInclusively: true,
   },
   {
     id: 'w2',
@@ -691,7 +692,7 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 const scrollToSection = id =>
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 
-function calcDuration(period) {
+function calcDuration(period, countMonthsInclusively = false) {
   const now = new Date()
   const parse = s => {
     s = s.trim()
@@ -702,14 +703,18 @@ function calcDuration(period) {
     if (y) return new Date(+y[1], 0)
     return now
   }
-  const parts = period.split(' - ')
-  if (parts.length < 2) return null
-  const s = parse(parts[0]),
-    e = parse(parts[1])
-  const months = Math.max(
-    1,
-    (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth())
-  )
+  const months = period.split('、').reduce((total, range) => {
+    const parts = range.split(' - ')
+    if (parts.length < 2) return total
+    const s = parse(parts[0]),
+      e = parse(parts[1])
+    const monthDifference =
+      (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth())
+    return (
+      total + Math.max(1, monthDifference + (countMonthsInclusively ? 1 : 0))
+    )
+  }, 0)
+  if (months === 0) return null
   const y = Math.floor(months / 12),
     m = months % 12
   if (y > 0 && m > 0) return `${y}年${m}個月`
@@ -722,7 +727,10 @@ function calcDuration(period) {
 const filteredExp = computed(() =>
   experienceData
     .filter(item => item.type === currentTab.value)
-    .map(item => ({ ...item, duration: calcDuration(item.period) }))
+    .map(item => ({
+      ...item,
+      duration: calcDuration(item.period, item.countMonthsInclusively),
+    }))
 )
 
 // ── Lifecycle ────────────────────────────────────────────────────────────────

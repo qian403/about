@@ -32,6 +32,7 @@ describe('HomeView - Role Rotation Property Tests', () => {
 
   beforeEach(() => {
     vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 7, 22))
     wrapper = mount(HomeView, {
       global: {
         stubs: {
@@ -53,6 +54,17 @@ describe('HomeView - Role Rotation Property Tests', () => {
     const roleElement = wrapper.find('.hero-role')
     expect(roleElement.exists()).toBe(true)
     expect(roleElement.text()).toBe(expectedRoles[0])
+  })
+
+  it('sums separate employment periods into one total duration', () => {
+    const experiences = wrapper.findAll('.timeline-item')
+    const firstExperience = experiences[0]
+
+    expect(firstExperience.find('.timeline-period').text()).toBe(
+      '2024年11月 - 2025年6月、2025年12月 - 現在'
+    )
+    expect(firstExperience.find('.timeline-dur').text()).toBe('· 1年5個月')
+    expect(experiences[1].find('.timeline-dur').text()).toBe('· 2個月')
   })
 
   it('Property 1: Role rotates to next role after interval', async () => {
