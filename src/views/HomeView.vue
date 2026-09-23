@@ -352,19 +352,19 @@ const projects = [
     demo: null,
   },
   {
-    id: 'futurenest-chatbot',
+    id: 'niu-life',
     order: 3,
-    name: 'FutureNest Chatbot',
-    description: '具備 RAG 功能的 Chatbot，使用 Django + React.js 建構',
+    name: 'NIU-Life',
+    description: '為宜蘭大學學生打造的非官方 iOS App，整合課表、M 園區與校園服務',
     details:
-      '建立可檢索外部知識的聊天機器人，將語意搜尋與生成能力整合成完整問答流程。',
+      '使用 SwiftUI 開發的校務輔助工具，集中查詢課程、成績、行事曆及圖書館服務。',
     highlights: [
-      'RAG 管線整合，提升回答可用性',
-      '前後端分離架構，方便模組化擴充',
-      '可依資料來源調整檢索策略與提示詞',
+      '整合課表、M 園區、成績與畢業門檻查詢',
+      '掃描課堂 QR Code 進入點名流程，顯示圖書館通行碼',
+      '提供主畫面小工具、鎖定畫面快捷與課表即時動態',
     ],
-    tags: ['Django', 'React', 'RAG', 'Python'],
-    github: 'https://github.com/qian403/futurenest-chatbot',
+    tags: ['Swift', 'SwiftUI', 'iOS'],
+    github: 'https://github.com/qian403/NIU-app',
     demo: null,
   },
 ]
