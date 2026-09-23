@@ -175,16 +175,16 @@ defineExpose({
 
 .navbar:not(.scrolled):not(.menu-open) .nav-brand,
 .navbar:not(.scrolled):not(.menu-open) .nav-link {
-  color: #ffffff;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+  color: var(--color-text);
+  text-shadow: none;
 }
 
 .navbar:not(.scrolled):not(.menu-open) .nav-link:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .navbar:not(.scrolled):not(.menu-open) .bar {
-  background: #ffffff;
+  background: var(--color-text);
 }
 
 @media (hover: hover) {
