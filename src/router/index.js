@@ -8,6 +8,11 @@ const routes = [
     component: HomeView,
   },
   {
+    path: '/cv',
+    name: 'cv',
+    component: () => import('../views/CvView.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('../views/NotFoundView.vue'),

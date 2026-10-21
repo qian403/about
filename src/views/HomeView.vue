@@ -34,6 +34,7 @@
               <button class="btn" @click="scrollToSection('contact')">
                 聯絡我
               </button>
+              <router-link class="btn" to="/cv">履歷</router-link>
               <a
                 class="btn btn-primary"
                 href="https://blog.chien.dev"
@@ -391,7 +392,7 @@ const experienceData = [
     type: 'work',
     title: '實習工程師',
     company: '瀚霖智動銷售科技有限公司',
-    period: '2024年11月 - 2025年6月、2025年12月 - 現在',
+    period: '2024年11月 - 2025年6月、2025年12月 - 2026年10月',
     countMonthsInclusively: true,
   },
   {

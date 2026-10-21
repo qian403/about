@@ -38,6 +38,7 @@ describe('HomeView - Role Rotation Property Tests', () => {
         stubs: {
           FilterableTimeline: mockFilterableTimeline,
           'md-icon': mockMdIcon,
+          RouterLink: true,
         },
       },
       attachTo: document.body,
@@ -61,9 +62,9 @@ describe('HomeView - Role Rotation Property Tests', () => {
     const firstExperience = experiences[0]
 
     expect(firstExperience.find('.timeline-period').text()).toBe(
-      '2024年11月 - 2025年6月、2025年12月 - 現在'
+      '2024年11月 - 2025年6月、2025年12月 - 2026年10月'
     )
-    expect(firstExperience.find('.timeline-dur').text()).toBe('· 1年5個月')
+    expect(firstExperience.find('.timeline-dur').text()).toBe('· 1年7個月')
     expect(experiences[1].find('.timeline-dur').text()).toBe('· 2個月')
   })
 
