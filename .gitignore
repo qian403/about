@@ -36,3 +36,4 @@ coverage
 *.sln
 *.sw?
 .sisyphus/
+.memsearch/
