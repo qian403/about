@@ -59,6 +59,7 @@ describe('NavBar - Property 7: 導航功能正確性', () => {
       global: {
         stubs: {
           'md-icon': mockMdIcon,
+          RouterLink: true,
         },
       },
     })
@@ -241,6 +242,7 @@ describe('NavBar - Property 7: 導航功能正確性 (Generated Data)', () => {
       global: {
         stubs: {
           'md-icon': { template: '<span class="md-icon"><slot /></span>' },
+          RouterLink: true,
         },
       },
     })

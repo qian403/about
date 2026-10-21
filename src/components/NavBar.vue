@@ -27,6 +27,13 @@
           @click.prevent="handleNavClick(link.id)"
           >{{ link.label }}</a
         >
+        <router-link
+          to="/cv"
+          class="nav-page-link"
+          role="menuitem"
+          @click="isMenuOpen = false"
+          >CV</router-link
+        >
       </div>
 
       <button
@@ -174,12 +181,14 @@ defineExpose({
 }
 
 .navbar:not(.scrolled):not(.menu-open) .nav-brand,
-.navbar:not(.scrolled):not(.menu-open) .nav-link {
+.navbar:not(.scrolled):not(.menu-open) .nav-link,
+.navbar:not(.scrolled):not(.menu-open) .nav-page-link {
   color: var(--color-text);
   text-shadow: none;
 }
 
-.navbar:not(.scrolled):not(.menu-open) .nav-link:hover {
+.navbar:not(.scrolled):not(.menu-open) .nav-link:hover,
+.navbar:not(.scrolled):not(.menu-open) .nav-page-link:hover {
   background: rgba(0, 0, 0, 0.04);
 }
 
@@ -225,7 +234,8 @@ defineExpose({
   gap: 0.25rem;
 }
 
-.nav-link {
+.nav-link,
+.nav-page-link {
   padding: 0.375rem 0.75rem;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
@@ -240,7 +250,8 @@ defineExpose({
   align-items: center;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-page-link:hover {
   color: var(--color-text);
   background: rgba(0, 0, 0, 0.04);
 }
@@ -321,7 +332,8 @@ defineExpose({
     visibility: visible;
   }
 
-  .nav-link {
+  .nav-link,
+  .nav-page-link {
     font-size: var(--font-size-xl);
     padding: var(--spacing-sm) var(--spacing-xl);
     min-width: 180px;

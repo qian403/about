@@ -72,6 +72,7 @@ describe('Property 8: 互動元素最小尺寸', () => {
         global: {
           stubs: {
             'md-icon': mockMdIcon,
+            RouterLink: true,
           },
         },
         attachTo: document.body,

@@ -195,6 +195,7 @@ describe('Property 9: 無障礙標準符合性', () => {
         global: {
           stubs: {
             'md-icon': mockMdIcon,
+            RouterLink: true,
           },
         },
         attachTo: document.body,
