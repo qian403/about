@@ -226,7 +226,7 @@
       <section class="cv-web-section" aria-labelledby="web-background-heading">
         <div class="cv-web-section-label">
           <p>04 / Background</p>
-          <h2 id="web-background-heading">學歷與證照</h2>
+          <h2 id="web-background-heading">學歷、證照與獲獎</h2>
         </div>
         <div class="cv-web-content cv-two-columns">
           <div>
@@ -265,6 +265,29 @@
                 <p class="cv-mono-accent cv-mono-date">
                   {{ certification.year }}
                 </p>
+              </div>
+            </div>
+            <h3 class="cv-web-subheading cv-web-subheading-spaced">Awards</h3>
+            <div class="cv-cert-list">
+              <div
+                v-for="award in awards"
+                :key="award.name"
+                class="cv-compact-row cv-cert-row"
+              >
+                <div>
+                  <p class="cv-strong">
+                    <a
+                      :href="award.href"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="cv-list-link"
+                    >
+                      <strong>{{ award.name }}</strong>
+                    </a>
+                  </p>
+                  <p class="cv-subtext">{{ award.result }}</p>
+                </div>
+                <p class="cv-mono-accent cv-mono-date">{{ award.year }}</p>
               </div>
             </div>
           </div>
@@ -399,6 +422,28 @@
                   {{ certification.level }}
                 </p>
                 <p class="cv-p-meta">{{ certification.issuer }}</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="cv-section" aria-labelledby="awards-heading">
+            <h2 id="awards-heading" class="cv-heading">Awards</h2>
+            <div class="cv-stack cv-stack-3">
+              <div v-for="award in awards" :key="award.name" class="cv-entry">
+                <div class="cv-p-split">
+                  <h3 class="cv-p-title cv-p-title-sm">
+                    <a
+                      :href="award.href"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="cv-p-name-link"
+                    >
+                      {{ award.name }}
+                    </a>
+                  </h3>
+                  <span class="cv-p-year">{{ award.year }}</span>
+                </div>
+                <p class="cv-p-level">{{ award.result }}</p>
               </div>
             </div>
           </section>
@@ -665,6 +710,15 @@ const certifications = [
     level: '',
     issuer: '勞動部勞動力發展署',
     year: '2022',
+  },
+]
+
+const awards = [
+  {
+    name: '第 31 屆資訊應用服務創新競賽',
+    result: '資安應用組 第一名',
+    year: '2026',
+    href: 'https://innoserveawards.tca.org.tw/award.aspx',
   },
 ]
 
@@ -1350,6 +1404,10 @@ a {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 3.5rem;
+}
+
+.cv-web-subheading-spaced {
+  margin-top: 2rem;
 }
 
 .cv-compact-timeline,
